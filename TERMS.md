@@ -5,7 +5,7 @@
 
 ## Acceptance
 
-By installing, copying, launching, or using AI Messenger, you confirm that you have read and agree to these terms and the [PolyForm Noncommercial License 1.0.0](LICENSE.md). If you do not agree, do not install, copy, or use the application.
+By installing, copying, launching, or using AI Messenger, you confirm that you have read and agree to these terms and the [AI Messenger Use License v1.0](LICENSE.md). If you do not agree, do not install, copy, or use the application.
 
 ## What the application is
 
@@ -21,11 +21,11 @@ This is a design statement, not a guarantee about the security of the user's ope
 
 Each running model consumes local resources. Multiple assistants, simultaneous chats, vision requests, and group chats may materially increase CPU, GPU, memory, storage, battery, and fan use. AI Messenger does not promise a particular response time or resource level. Model output may be incorrect, incomplete, biased, or unsuitable for a particular purpose. Validate important information independently.
 
-## Noncommercial distribution
+## Permitted use and restricted distribution
 
-AI Messenger is released under the PolyForm Noncommercial License 1.0.0. Commercial use, commercial copying, commercial modification, commercial redistribution, resale, paid hosting, and inclusion in a commercial product or service are prohibited without a separate written license from Jesada Chandraprasert.
+AI Messenger may be used for personal, educational, nonprofit, workplace, and business purposes. Using the application to support work, a business, or a commercial activity is permitted.
 
-Noncommercial users may share the unmodified application, or noncommercial changes to it, only when they include these terms, the license, the attribution notices, and the original copyright notice. No one may imply that Microsoft, MSN Messenger, Ollama, or any third-party project endorses AI Messenger.
+You may not publish, distribute, share, repackage, rebrand, resell, sublicense, modify for distribution, host, or bundle AI Messenger into another product or service without prior written permission from Jesada Chandraprasert. You may make copies only as reasonably necessary to install the unmodified application on devices you control or to keep a backup. No one may imply that Microsoft, MSN Messenger, Ollama, or any third-party project endorses AI Messenger.
 
 ## Third-party software and trademarks
 

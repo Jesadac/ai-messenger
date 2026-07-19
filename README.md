@@ -4,17 +4,13 @@ A local-first macOS desktop chat window inspired by early-2000s instant messenge
 
 Project information and updates: [aimessenger.sermocast.com](https://aimessenger.sermocast.com).
 
-## Downloads
-
-Download the macOS (Apple silicon), Windows x64, or Linux x64 package from the [latest release](https://github.com/Jesadac/ai-messenger/releases/latest).
-
 ## Read before installing
 
-By installing, copying, or using AI Messenger, you agree to the [AI Messenger Terms of Use](TERMS.md) and the [PolyForm Noncommercial License 1.0.0](LICENSE.md). If you do not agree, do not install or use the application.
+By installing, copying, or using AI Messenger, you agree to the [AI Messenger Terms of Use](TERMS.md) and the [AI Messenger Use License v1.0](LICENSE.md). If you do not agree, do not install or use the application.
 
 AI Messenger is an interface layer (desktop client) for Ollama or another compatible **local** inference server. It is not Ollama, does not provide hosted AI, and does not include or relicense any model. Ollama, downloaded models, Electron, Chromium, and other third-party components remain subject to their own licenses and terms.
 
-The application is intended for personal, educational, hobby, and other noncommercial use. Commercial copying, commercial modification, commercial redistribution, resale, SaaS/service-bureau use, or bundling it into a paid product is not permitted without a separate written license from the copyright holder. Noncommercial redistribution must keep the license, terms, attribution, and notices intact.
+AI Messenger may be used for personal, educational, nonprofit, workplace, and business purposes. You may not redistribute, repackage, rebrand, resell, sublicense, modify for distribution, host, or bundle the application into another product or service without prior written permission from the copyright holder.
 
 There is no telemetry, analytics, advertising, or developer reporting. Chat content, attachments, profiles, settings, and history remain on the user's device. The app communicates with the local endpoint configured by the user; if the user attaches an image or file, it is sent to that local model for processing. Users are responsible for the security of their device, Ollama installation, downloaded models, and any network changes they make.
 

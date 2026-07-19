@@ -10,7 +10,7 @@ const root = path.resolve(__dirname, '..');
 const distributionRoot = process.env.AIM_RELEASE_DIR || path.join(root, 'distribution');
 const packageDir = path.join(distributionRoot, 'deploymentpackages');
 const internalDir = path.join(root, 'internal-release-records');
-const requiredDocs = ['README.md', 'LICENSE.md', 'TERMS.md', 'SECURITY.md', 'DISTRIBUTION.md', 'THIRD-PARTY-NOTICES.md', 'SKILLS_GUIDE.md', 'RELEASE_CHECKLIST.md'];
+const requiredDocs = ['README.md', 'LICENSE.md', 'TERMS.md', 'SECURITY.md', 'DISTRIBUTION.md', 'THIRD-PARTY-NOTICES.md', 'RELEASE_CHECKLIST.md'];
 const packages = [
   'AI-Messenger-mac-arm64.zip',
   'AI-Messenger-windows-x64.zip',

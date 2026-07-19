@@ -1,15 +1,28 @@
-# PolyForm Noncommercial License 1.0.0
+# AI Messenger Use License v1.0
 
-AI Messenger is licensed under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/).
+Copyright © 2026 Jesada Chandraprasert. All rights reserved.
 
-**Required Notice:** Copyright 2026 Jesada Chandraprasert.
+## Permission to use
 
-The authoritative license text is maintained at the URL above. You must provide those terms, or the URL above, to anyone who receives a copy of this software. The project summary below highlights the restrictions that apply to this distribution; the linked license controls.
+Subject to this license, you may install, run, and use an unmodified copy of AI Messenger for any lawful purpose, including personal, educational, nonprofit, and workplace or business use. You may make copies only as reasonably necessary to install the application on devices you control or to keep a backup.
 
-## Project restrictions and notices
+## Restrictions
 
-- You must accept the PolyForm terms as strict obligations and conditions of the license.
-- Noncommercial use, noncommercial modification, and noncommercial redistribution are permitted only under the license terms and with these notices preserved.
-- Commercial use, commercial copying, commercial modification, commercial redistribution, resale, paid hosting, and inclusion in a commercial product or service are not permitted without a separate written license from Jesada Chandraprasert.
-- The license provides no warranty and limits liability to the maximum extent permitted by law.
-- Fair-use rights that cannot lawfully be limited remain unaffected.
+Without prior written permission from Jesada Chandraprasert, you may not:
+
+- publish, distribute, share, sell, rent, lease, sublicense, or otherwise transfer AI Messenger or any copy of it to another party;
+- repackage, rebrand, market, or present AI Messenger as your own application;
+- modify, translate, adapt, create derivative works from, or combine AI Messenger with another product for distribution;
+- offer AI Messenger as a hosted service, managed service, SaaS product, or paid bundle;
+- remove or alter copyright, attribution, license, or trademark notices; or
+- use the AI Messenger name or artwork to imply endorsement, affiliation, or authorship.
+
+## Ownership and third-party software
+
+This license grants permission to use AI Messenger only. It does not transfer ownership of its code, artwork, name, or other intellectual-property rights. Ollama, Electron, Chromium, Node.js, downloaded models, and other third-party components remain subject to their own licenses and terms.
+
+## Disclaimer
+
+AI Messenger is provided “as is” and “as available,” without warranties or conditions of any kind. To the maximum extent permitted by law, the copyright holder is not liable for losses arising from use of the application.
+
+This is a source-available proprietary use license, not an open-source license. Rights that cannot lawfully be limited remain unaffected.

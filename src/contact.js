@@ -495,6 +495,87 @@ function formatLastMessageTime(timestamp) {
   return { label, title: `Last message: ${date.toLocaleString()}` };
 }
 
+function sessionChatKey(session) {
+  if (session?.groupId) return `group:${session.groupId}`;
+  const profileIds = Array.isArray(session?.groupProfileIds) ? session.groupProfileIds.filter(Boolean).sort() : [];
+  if (profileIds.length > 1) return `group-profiles:${profileIds.join('|')}`;
+  const groupModels = Array.isArray(session?.groupModels) ? session.groupModels.filter(Boolean).sort() : [];
+  if (groupModels.length > 1) return `group-models:${groupModels.join('|')}`;
+  return `profile:${session?.profileId || session?.model || session?.id || ''}`;
+}
+
+function activeChatSessions() {
+  const latest = new Map();
+  for (const session of [...sessions].sort((a, b) => String(b?.updatedAt || '').localeCompare(String(a?.updatedAt || '')))) {
+    const key = sessionChatKey(session);
+    if (!latest.has(key)) latest.set(key, session);
+  }
+  return [...latest.values()];
+}
+
+function searchMessageText(message) {
+  return String(message?.displayContent || message?.content || '').replace(/\s+/g, ' ').trim();
+}
+
+function chatSearchAudience(session) {
+  if (session?.groupId || (Array.isArray(session?.groupProfileIds) && session.groupProfileIds.length > 1) || (Array.isArray(session?.groupModels) && session.groupModels.length > 1)) {
+    return session.groupName || groups.find((group) => group.id === session.groupId)?.name || 'AI Group';
+  }
+  const profile = profileById(session?.profileId) || profiles.find((entry) => entry.model === session?.model);
+  return profile ? profileDisplayName(profile) : (session?.model || 'AI chat');
+}
+
+async function openChatSearchResult(session) {
+  const isGroup = session?.groupId || (Array.isArray(session?.groupProfileIds) && session.groupProfileIds.length > 1) || (Array.isArray(session?.groupModels) && session.groupModels.length > 1);
+  if (isGroup) {
+    const group = groups.find((entry) => entry.id === session.groupId)
+      || groups.find((entry) => groupHistoryKey(entry.name, entry.profileIds) === groupHistoryKey(session.groupName, session.groupProfileIds || []));
+    const participantIds = group?.profileIds || session.groupProfileIds || [];
+    const participants = participantIds.map(profileById).filter(Boolean);
+    if (participants.length < 2) throw new Error('This group no longer has enough active assistant profiles to open.');
+    await window.retro.dockGroupChat(participants.map(profileParticipant), group?.name || session.groupName || 'AI Group', group?.id || session.groupId || '');
+  } else {
+    const profile = profileById(session?.profileId) || profiles.find((entry) => entry.model === session?.model);
+    if (!profile) throw new Error('This assistant profile is no longer available.');
+    await openProfileChat(profile.id);
+  }
+  $('#chat-search').value = '';
+  renderChatSearchResults();
+}
+
+function renderChatSearchResults() {
+  const input = $('#chat-search');
+  const results = $('#chat-search-results');
+  const clear = $('#clear-chat-search');
+  const query = input.value.trim().toLowerCase();
+  clear.classList.toggle('hidden', !query);
+  results.innerHTML = '';
+  results.classList.toggle('hidden', !query);
+  if (!query) return;
+  const matches = [];
+  for (const session of activeChatSessions()) {
+    for (const message of Array.isArray(session.messages) ? session.messages : []) {
+      const text = searchMessageText(message);
+      if (text.toLowerCase().includes(query)) matches.push({ session, message, text });
+    }
+  }
+  if (!matches.length) {
+    results.innerHTML = '<span class="chat-search-empty">No matching text in active chats.</span>';
+    return;
+  }
+  for (const match of matches.slice(0, 30)) {
+    const button = document.createElement('button');
+    const timestamp = Date.parse(match.message?.timestamp || match.session?.updatedAt);
+    const time = Number.isFinite(timestamp) ? new Date(timestamp).toLocaleString() : 'Unknown time';
+    const excerpt = match.text.length > 150 ? `${match.text.slice(0, 147)}…` : match.text;
+    button.type = 'button';
+    button.className = 'chat-search-result';
+    button.innerHTML = `<strong>${escapeHtml(chatSearchAudience(match.session))}</strong><span>${escapeHtml(match.message?.role === 'assistant' ? 'Assistant' : 'You')} · ${escapeHtml(time)}</span><small>${escapeHtml(excerpt)}</small>`;
+    button.addEventListener('click', () => openChatSearchResult(match.session).catch((error) => setStatus('offline', error.message)));
+    results.append(button);
+  }
+}
+
 function activePictureModel() {
   const profile = profileById(activePictureProfileId());
   if (profile) return profile.model;
@@ -639,7 +720,7 @@ function checkProfileIdle() {
 }
 
 function renderModels() {
-  const query = $('#model-search').value.trim().toLowerCase();
+  const query = '';
   filteredProfiles = profiles.filter((profile) => {
     const model = modelByName(profile.model);
     const searchable = `${profile.name} ${profile.model} ${model ? modelSubtitle(model) : ''}`.toLowerCase();
@@ -1235,7 +1316,12 @@ $('#stop-all-models').addEventListener('click', async (event) => {
     button.textContent = 'Stop All';
   }
 });
-$('#model-search').addEventListener('input', renderModels);
+$('#chat-search').addEventListener('input', renderChatSearchResults);
+$('#clear-chat-search').addEventListener('click', () => {
+  $('#chat-search').value = '';
+  renderChatSearchResults();
+  $('#chat-search').focus();
+});
 $('#toggle-online').addEventListener('click', () => { const hidden = $('#model-list').classList.toggle('hidden'); $('#toggle-online').textContent = hidden ? '▸' : '▾'; $('#toggle-online').setAttribute('aria-expanded', String(!hidden)); });
 $('#toggle-offline').addEventListener('click', () => { const hidden = $('#offline-model-list').classList.toggle('hidden'); $('#toggle-offline').textContent = hidden ? '▸' : '▾'; $('#toggle-offline').setAttribute('aria-expanded', String(!hidden)); });
 $('#toggle-groups').addEventListener('click', () => { const hidden = $('#group-list').classList.toggle('hidden'); $('#toggle-groups').textContent = hidden ? '▸' : '▾'; $('#toggle-groups').setAttribute('aria-expanded', String(!hidden)); });
@@ -1647,6 +1733,11 @@ window.retro.onStateChanged((state, sections) => {
   }
   if (sections.includes('profileGroups')) renderProfileGroups();
   if (sections.includes('groups')) renderGroups();
+  if (sections.includes('sessions')) {
+    renderModels();
+    renderGroups();
+    renderChatSearchResults();
+  }
   if (sections.includes('connection')) loadModels();
 });
 window.retro.onDockState((state) => {

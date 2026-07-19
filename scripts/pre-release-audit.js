@@ -16,6 +16,7 @@ const packages = [
   'AI-Messenger-mac-arm64.zip',
   'AI-Messenger-windows-x64.zip',
   'AI-Messenger-linux-x64.zip',
+  'AI-Messenger-linux-arm64.zip',
 ];
 const forbidden = /(?:tmp|cache|credentials|keychain|history|localstorage|\.env|(?:^|\/)\.git(?:\/|$)|codex-clipboard|TemporaryItems)/i;
 const forbiddenBundleText = /(?:\/Users\/art|TemporaryItems|codex-clipboard|internal-release-records|RELEASE_CHECKLIST\.md|userName\s*:\s*['"]Art['"])/i;

@@ -9,7 +9,7 @@ Project information and updates: [aimessenger.sermocast.com](https://aimessenger
 Download the current package from the [latest release](https://github.com/Jesadac/ai-messenger/releases/latest).
 
 1. Install Ollama and download at least one model, or start another compatible local model server.
-2. Choose the package for your computer: `mac-arm64` for Apple-silicon Macs, `windows-x64` for 64-bit Windows, or `linux-x64` for 64-bit Linux.
+2. Choose the package for your computer: `mac-arm64` for Apple-silicon Macs, `windows-x64` for 64-bit Windows, `linux-x64` for Intel/AMD 64-bit Linux, or `linux-arm64` for ARM64 Linux.
 3. Extract the package and launch the application. On macOS, move **Retro Messenger Assistant.app** to Applications; on Windows, run `ai-messenger.exe`; on Linux, run `./ai-messenger` from the extracted folder.
 4. In AI Messenger, open **Tools → Setup local model**, choose automatic detection or enter your local server address, then select **Test Connection** and **Save & Connect**.
 

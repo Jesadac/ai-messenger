@@ -15,8 +15,6 @@ const mirroredPackageDocs = ['LICENSE.md', 'TERMS.md', 'THIRD-PARTY-NOTICES.md']
 const packages = [
   'AI-Messenger-mac-arm64.zip',
   'AI-Messenger-windows-x64.zip',
-  'AI-Messenger-linux-x64.zip',
-  'AI-Messenger-linux-arm64.zip',
 ];
 const forbidden = /(?:tmp|cache|credentials|keychain|history|localstorage|\.env|(?:^|\/)\.git(?:\/|$)|codex-clipboard|TemporaryItems)/i;
 const forbiddenBundleText = /(?:\/Users\/art|TemporaryItems|codex-clipboard|internal-release-records|RELEASE_CHECKLIST\.md|userName\s*:\s*['"]Art['"])/i;
@@ -99,7 +97,7 @@ function main() {
   if (archiveFindings.length) throw new Error(`Deployment archive hygiene findings:\n${archiveFindings.join('\n')}`);
 
   fs.writeFileSync(path.join(packageDir, 'SHA256SUMS.txt'), `${checksums.join('\n')}\n`);
-  const report = `# AI Messenger Automated Pre-release Audit\n\nGenerated: ${new Date().toISOString()}\n\n## Passed\n\n- Source syntax validation\n- Encrypted-vault smoke test\n- npm dependency audit\n- Required release-document check\n- Deployment package presence check\n- Deployment archive and packaged-app hygiene scan\n- SHA-256 checksums written to distribution/deploymentpackages/SHA256SUMS.txt\n\n## Manual release gates\n\n- Platform code signing and macOS notarization\n- Clean-machine testing on macOS, Windows, and Linux\n- Final review of checksums after signing\n\nThese remaining gates require platform identities or target operating systems and cannot be safely completed by this local audit.\n`;
+  const report = `# AI Messenger Automated Pre-release Audit\n\nGenerated: ${new Date().toISOString()}\n\n## Passed\n\n- Source syntax validation\n- Encrypted-vault smoke test\n- npm dependency audit\n- Required release-document check\n- Deployment package presence check\n- Deployment archive and packaged-app hygiene scan\n- SHA-256 checksums written to distribution/deploymentpackages/SHA256SUMS.txt\n\n## Manual release gates\n\n- Platform code signing and macOS notarization\n- Clean-machine testing on macOS and Windows\n- Final review of checksums after signing\n\nThese remaining gates require platform identities or target operating systems and cannot be safely completed by this local audit.\n`;
   const reportPath = path.join(internalDir, 'RELEASE_AUDIT_REPORT.md');
   fs.writeFileSync(reportPath, report);
   console.log(`\nRelease audit passed. Report: ${reportPath}`);

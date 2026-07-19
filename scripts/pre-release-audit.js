@@ -44,6 +44,12 @@ function verifyMirroredPackageDocs() {
   return mismatches;
 }
 
+function syncMirroredPackageDocs() {
+  for (const file of mirroredPackageDocs) {
+    fs.copyFileSync(path.join(root, file), path.join(packageDir, file));
+  }
+}
+
 function scanPackagedBundles() {
   const findings = [];
   const distRoot = path.join(root, 'dist');
@@ -74,6 +80,7 @@ function main() {
   const missingDocs = requiredDocs.filter((file) => !fs.existsSync(path.join(root, file)));
   if (missingDocs.length) throw new Error(`Missing release documents: ${missingDocs.join(', ')}`);
   if (!fs.existsSync(packageDir)) throw new Error(`Deployment folder not found: ${packageDir}`);
+  syncMirroredPackageDocs();
   const mirroredDocMismatches = verifyMirroredPackageDocs();
   if (mirroredDocMismatches.length) throw new Error(`Distribution documentation is out of sync:\n${mirroredDocMismatches.join('\n')}`);
 

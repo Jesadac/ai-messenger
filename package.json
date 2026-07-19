@@ -1,0 +1,26 @@
+{
+  "name": "retro-messenger-assistant",
+  "version": "0.1.0",
+  "description": "A local-first, 2000s Messenger-inspired desktop assistant for Ollama.",
+  "productName": "Retro Messenger Assistant",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check src/main.js && node --check src/preload.js && node --check src/model-guide.js && node --check src/renderer.js && node --check src/contact.js && node --check src/secure-store.js && node --check scripts/set-mac-icon.js && node --check scripts/harden-fuses.js && node --check scripts/pre-release-audit.js && node --check scripts/install-local-mac.js",
+    "security:audit": "npm audit --audit-level=high",
+    "security:smoke": "node scripts/security-smoke.js",
+    "release:audit": "node scripts/pre-release-audit.js",
+    "package:mac": "electron-packager . 'Retro Messenger Assistant' --platform=darwin --arch=arm64 --icon='./assets/ai-messenger.icns' --app-bundle-id=com.jesadachandraprasert.ai-messenger --asar --out=dist --overwrite --prune=true --ignore='/(dist|scripts|tmp|internal-release-records)(/|$)|/(README|SECURITY|DISTRIBUTION|RELEASE_CHECKLIST)\\.md$' && node scripts/set-mac-icon.js && node scripts/harden-fuses.js",
+    "package:win": "electron-packager . 'Retro Messenger Assistant' --platform=win32 --arch=x64 --icon='./assets/ai-messenger.ico' --executable-name=ai-messenger --asar --out=dist --overwrite --prune=true --ignore='/(dist|scripts|tmp|internal-release-records)(/|$)|/(README|SECURITY|DISTRIBUTION|RELEASE_CHECKLIST)\\.md$' && node scripts/harden-fuses.js 'dist/Retro Messenger Assistant-win32-x64/ai-messenger.exe' win32",
+    "package:linux": "electron-packager . 'Retro Messenger Assistant' --platform=linux --arch=x64 --icon='./assets/ai-messenger-1024.png' --executable-name=ai-messenger --asar --out=dist --overwrite --prune=true --ignore='/(dist|scripts|tmp|internal-release-records)(/|$)|/(README|SECURITY|DISTRIBUTION|RELEASE_CHECKLIST)\\.md$' && node scripts/harden-fuses.js 'dist/Retro Messenger Assistant-linux-x64/ai-messenger' linux",
+    "package:all": "npm run package:mac && npm run package:win && npm run package:linux",
+    "install:local": "node scripts/install-local-mac.js",
+    "refresh:local": "npm run check && npm run package:mac && npm run install:local"
+  },
+  "devDependencies": {
+    "@electron/fuses": "^2.1.3",
+    "@electron/packager": "^20.0.3",
+    "electron": "^43.1.1",
+    "png-to-ico": "^3.0.2"
+  }
+}

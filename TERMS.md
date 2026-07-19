@@ -29,7 +29,7 @@ Noncommercial users may share the unmodified application, or noncommercial chang
 
 ## Third-party software and trademarks
 
-Ollama, Electron, Chromium, Node.js, and other bundled dependencies are third-party software. Their copyright notices and licenses continue to apply. “Ollama” is a trademark of its respective owner. AI Messenger is an independent interface and is not affiliated with Microsoft or the former MSN Messenger service.
+Ollama, Electron, Chromium, Node.js, and the packages listed in `package-lock.json` are third-party software. Their copyright notices and licenses continue to apply. “Ollama” is a trademark of its respective owner. AI Messenger is an independent interface and is not affiliated with Microsoft or the former MSN Messenger service.
 
 ## Disclaimer and limitation of liability
 

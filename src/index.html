@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retro Messenger Assistant</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="msn-window">
+      <header class="xp-titlebar">
+        <span class="tiny-msn-person" aria-hidden="true"><i></i><b></b></span>
+        <strong>Conversation - <span data-buddy-name>Desktop Helper</span></strong>
+        <button id="detach-chat" class="detach-chat hidden" type="button" title="Open this chat in its own window" aria-label="Detach chat">↗</button>
+        <button id="close-docked-chat" class="close-docked-chat hidden" type="button" title="Close this chat view and keep the contact list open" aria-label="Close chat pane">×</button>
+        <div class="window-controls">
+          <button type="button" data-window-action="minimize" aria-label="Minimize">_</button>
+          <button type="button" data-window-action="maximize" aria-label="Maximize">□</button>
+          <button class="close" type="button" data-window-action="close" aria-label="Close">×</button>
+        </div>
+      </header>
+
+      <nav class="menu-bar" aria-label="Application menu">
+        <div class="menu-root">
+          <button type="button" class="menu-trigger" data-menu="file-menu" aria-expanded="false">File</button>
+          <div id="file-menu" class="menu-dropdown hidden" role="menu">
+            <button type="button" data-command="new-chat" role="menuitem"><span>New Chat</span><kbd>⌘N</kbd></button>
+            <button type="button" data-command="chat-history" role="menuitem"><span>Chat History…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="user-profile" role="menuitem"><span>About Me…</span></button>
+            <button type="button" data-command="user-picture" role="menuitem"><span>Change my picture…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="hide" role="menuitem"><span>Hide AI Messenger</span><kbd>⌘H</kbd></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="exit" role="menuitem"><span>Exit</span><kbd>⌘Q</kbd></button>
+          </div>
+        </div>
+        <div class="menu-root">
+          <button type="button" class="menu-trigger" data-menu="edit-menu" aria-expanded="false">Edit</button>
+          <div id="edit-menu" class="menu-dropdown hidden" role="menu">
+            <button type="button" data-command="cut" role="menuitem"><span>Cut</span><kbd>⌘X</kbd></button>
+            <button type="button" data-command="copy" role="menuitem"><span>Copy</span><kbd>⌘C</kbd></button>
+            <button type="button" data-command="paste" role="menuitem"><span>Paste</span><kbd>⌘V</kbd></button>
+          </div>
+        </div>
+        <div class="menu-root">
+          <button type="button" class="menu-trigger" data-menu="actions-menu" aria-expanded="false">Actions</button>
+          <div id="actions-menu" class="menu-dropdown hidden" role="menu">
+            <button type="button" data-command="theme-light" data-theme-option="light" role="menuitemradio"><span>Light mode</span></button>
+            <button type="button" data-command="theme-dark" data-theme-option="dark" role="menuitemradio"><span>Dark mode</span></button>
+          </div>
+        </div>
+        <div class="menu-root">
+          <button type="button" class="menu-trigger" data-menu="tools-menu" aria-expanded="false">Tools</button>
+          <div id="tools-menu" class="menu-dropdown hidden" role="menu">
+            <button type="button" data-command="setup" role="menuitem"><span>Setup local model…</span></button>
+            <button type="button" data-command="chat-history" role="menuitem"><span>This Chat's History…</span></button>
+            <button type="button" data-command="chat-logs" role="menuitem"><span>All Chat Logs…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="assistant-config" role="menuitem"><span>Assistant configuration…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" class="menu-heading" disabled><span>Assistant Tone</span></button>
+            <button type="button" data-command="tone-kind" data-tone-option="kind" role="menuitemradio"><span>Kind</span></button>
+            <button type="button" data-command="tone-sarcastic" data-tone-option="sarcastic" role="menuitemradio"><span>Sarcastic</span></button>
+            <button type="button" data-command="tone-direct" data-tone-option="direct" role="menuitemradio"><span>To the point</span></button>
+            <button type="button" data-command="tone-helpful" data-tone-option="helpful" role="menuitemradio"><span>Helpful (Default)</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" class="menu-heading" disabled><span>Font size</span></button>
+            <button type="button" data-command="font-50" data-font-option="50" role="menuitemradio"><span>50%</span></button>
+            <button type="button" data-command="font-100" data-font-option="100" role="menuitemradio"><span>100% (Default)</span></button>
+            <button type="button" data-command="font-125" data-font-option="125" role="menuitemradio"><span>125%</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="buddy-picture" role="menuitem"><span>Change buddy picture…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="forget-auto-unlock" role="menuitem"><span>Require vault passphrase next launch</span></button>
+          </div>
+        </div>
+        <div class="menu-root">
+          <button type="button" class="menu-trigger" data-menu="help-menu" aria-expanded="false">Help</button>
+          <div id="help-menu" class="menu-dropdown help-menu hidden" role="menu">
+            <button type="button" data-command="about-us" role="menuitem"><span>About Us…</span></button>
+            <div class="menu-separator"></div>
+            <button type="button" data-command="model-guide" role="menuitem"><span>Installed Model Guide…</span></button>
+            <button type="button" data-command="features" role="menuitem"><span>Features…</span></button>
+            <button type="button" data-command="setup-guide" role="menuitem"><span>Setup Guide…</span></button>
+            <button type="button" data-command="user-guide" role="menuitem"><span>User Guide…</span></button>
+            <button type="button" data-command="license" role="menuitem"><span>License…</span></button>
+            <button type="button" data-command="terms" role="menuitem"><span>Terms of Service…</span></button>
+            <button type="button" data-command="user-data" role="menuitem"><span>User Data…</span></button>
+            <button type="button" data-command="contact-us" role="menuitem"><span>Contact Us…</span></button>
+            <div class="menu-separator"></div>
+          </div>
+        </div>
+      </nav>
+
+      <section class="action-bar">
+        <button id="invite-button" class="action-button" type="button"><span class="tool-icon invite">♟</span><span>Invite</span></button>
+        <button id="send-file-button" class="action-button" type="button"><span class="tool-icon files">▧</span><span>Send Files</span></button>
+        <input id="send-file-input" class="hidden-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif,text/*,.md,.csv,.json,.xml,.yaml,.yml,.js,.ts,.jsx,.tsx,.css,.html,.py,.php,.rb,.go,.rs,.java,.c,.cpp,.h,.hpp,.sql,.log" />
+        <button id="clear-chat-button" class="action-button" type="button"><span class="tool-icon video">⌫</span><span>Clear Chat</span></button>
+        <label class="thinking-control" for="thinking-mode"><span>Thinking</span><select id="thinking-mode" title="Fast disables extended reasoning or uses the model’s lowest supported level. Deep enables high reasoning when supported."><option value="fast">Fast</option><option value="deep">Deep</option></select></label>
+        <div class="toolbar-swoop"></div>
+        <div class="msn-wordmark" aria-label="AI-M"><em>AI-M</em><span class="flower-mark" aria-hidden="true"><i class="petal red"></i><i class="petal blue"></i><i class="petal green"></i><i class="petal yellow"></i><b></b></span></div>
+        <div class="round-tools"><button id="capture-button" type="button" title="Attach a desktop snapshot">▣</button><button type="button" title="Formatting tools">✎</button></div>
+      </section>
+
+      <section class="chat-layout">
+        <div class="chat-column">
+          <section class="transcript-panel">
+            <div class="recipient-line">
+              <span>To: <strong data-buddy-name>Desktop Helper</strong></span>
+              <label class="model-picker-label" for="model-select"><span>AI MODEL</span></label>
+              <select id="model-select" class="model-picker" disabled aria-label="Choose AI model"><option>Looking for Ollama…</option></select>
+            </div>
+            <div id="group-mentions" class="group-mentions hidden" aria-label="Mention an AI Friend"></div>
+            <div id="messages" class="messages" aria-live="polite">
+              <article class="message assistant">
+                <div class="message-author"><span data-buddy-name>Desktop Helper</span> says:</div>
+                <div class="bubble">Hey! I'm connected to your local Ollama. Use Activities when you want me to see a snapshot of your screen.</div>
+              </article>
+            </div>
+          </section>
+          <div id="chat-resize-divider" class="chat-resize-divider" role="separator" aria-label="Resize chat and message input areas" aria-orientation="horizontal" tabindex="0"></div>
+
+          <section class="compose-panel">
+            <div class="compose-tools">
+              <button type="button" class="font-button">A</button>
+              <button id="emoji-button" type="button" title="Choose an emoji">🙂⌄</button>
+              <span class="separator"></span>
+              <button id="image-upload-button" type="button" title="Attach an image">🌄 Send Picture</button>
+              <input id="image-upload-input" class="hidden-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+              <button type="button" data-insert-emoji="😉" title="Insert wink">😉⌄</button>
+              <button type="button" data-insert-emoji="🎁" title="Insert gift">🎁⌄</button>
+              <button type="button" data-insert-emoji="❤️" title="Insert heart">❤️</button>
+            </div>
+            <div id="emoji-picker" class="emoji-picker hidden" role="dialog" aria-label="Choose an emoji">
+              <div class="emoji-picker-title"><strong>Emoticons</strong><button id="close-emoji-picker" type="button" aria-label="Close">×</button></div>
+              <div class="emoji-grid">
+                <button type="button">😀</button><button type="button">😃</button><button type="button">😄</button><button type="button">😁</button><button type="button">😂</button><button type="button">😊</button>
+                <button type="button">😉</button><button type="button">😍</button><button type="button">😘</button><button type="button">😎</button><button type="button">🤔</button><button type="button">😅</button>
+                <button type="button">😭</button><button type="button">😡</button><button type="button">😴</button><button type="button">🤯</button><button type="button">🥳</button><button type="button">🤖</button>
+                <button type="button">👍</button><button type="button">👎</button><button type="button">👏</button><button type="button">🙏</button><button type="button">💪</button><button type="button">👀</button>
+                <button type="button">❤️</button><button type="button">💙</button><button type="button">💚</button><button type="button">💛</button><button type="button">✨</button><button type="button">🎉</button>
+                <button type="button">🔥</button><button type="button">⭐</button><button type="button">💡</button><button type="button">✅</button><button type="button">❌</button><button type="button">🐤</button>
+              </div>
+            </div>
+            <div id="attachment" class="attachment hidden">
+              <img id="attachment-image" alt="Desktop snapshot preview" />
+              <div><strong id="attachment-name">Attached image</strong><span>Attached to the next message</span></div>
+              <button id="remove-attachment" type="button" aria-label="Remove image">×</button>
+            </div>
+            <div id="mention-autocomplete" class="mention-autocomplete hidden" role="listbox" aria-label="Mention an AI Friend"></div>
+            <form id="composer" class="composer">
+              <textarea id="prompt" rows="4" placeholder="Type a message…"></textarea>
+              <div class="compose-buttons"><button id="send-button" type="submit">Send</button><button id="stop-button" class="stop-button hidden" type="button" disabled>Stop</button></div>
+            </form>
+            <div class="format-footer"><span>♬</span><strong>A</strong></div>
+          </section>
+        </div>
+
+        <aside class="display-pictures">
+          <div id="buddy-picture-card" class="picture-card helper-picture">
+            <div id="buddy-default-picture" class="classic-buddy" aria-label="Classic Messenger buddy"><i class="head"></i><i class="body"></i><i class="blue-wing"></i><i class="orange-wing"></i></div>
+            <img id="buddy-custom-picture" class="custom-profile-picture hidden" alt="Chat buddy profile" />
+            <div id="group-picture-grid" class="group-picture-grid hidden" aria-label="Group chat participants"></div>
+            <div id="buddy-capability-strip" class="profile-capability-strip" aria-label="Associated model capabilities"></div>
+            <button id="buddy-picture-menu-button" class="picture-caret" type="button" aria-label="Chat buddy picture options" aria-expanded="false">⌄</button>
+            <div id="buddy-picture-menu" class="profile-picture-menu hidden">
+              <button type="button" data-picture-action="buddy-rename">Change display name…</button>
+              <button type="button" data-picture-action="buddy-change">Change picture…</button>
+              <button type="button" data-picture-action="buddy-reset">Reset picture</button>
+            </div>
+          </div>
+          <div id="user-picture-card" class="picture-card duck-picture" role="button" tabindex="0" aria-label="Open About Me profile">
+            <span id="user-default-picture" aria-label="Rubber duck">🐤</span><i class="water"></i>
+            <img id="user-custom-picture" class="custom-profile-picture hidden" alt="Your profile" />
+            <button id="user-picture-menu-button" class="picture-caret" type="button" aria-label="Your picture options" aria-expanded="false">⌄</button>
+            <div id="user-picture-menu" class="profile-picture-menu hidden">
+              <button type="button" data-picture-action="user-change">Change picture…</button>
+              <button type="button" data-picture-action="user-reset">Reset picture</button>
+            </div>
+          </div>
+          <input id="buddy-picture-input" class="hidden-file-input" type="file" accept="image/png,image/jpeg,image/webp" />
+          <input id="user-picture-input" class="hidden-file-input" type="file" accept="image/png,image/jpeg,image/webp" />
+        </aside>
+      </section>
+
+      <footer class="status-bar"><strong id="status-text">Connecting…</strong><span id="status-dot"></span><span id="model-caption">Local assistant</span><i class="resize-grip">◢</i></footer>
+    </main>
+
+    <dialog id="source-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Choose a screen or window</strong><button id="close-dialog" type="button">×</button></div>
+      <p class="dialog-copy">Only one snapshot will be attached to your next message.</p>
+      <div id="permission-warning" class="permission-warning hidden">Screen Recording access is off. Allow it in System Settings, then restart the app. <button id="open-permissions" type="button">Open Settings</button></div>
+      <div id="source-grid" class="source-grid"></div>
+    </dialog>
+
+    <dialog id="invite-dialog" class="settings-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong id="invite-dialog-title">Invite an AI Friend</strong><button id="close-invite-dialog" type="button">×</button></div>
+      <form id="invite-form">
+        <p id="invite-dialog-description">Select another installed assistant to invite.</p>
+        <div id="group-participant-manager" class="group-participant-manager hidden"></div>
+        <label for="invite-model">AI Friend</label>
+        <select id="invite-model" required></select>
+        <div class="settings-actions"><button id="cancel-invite" type="button">Cancel</button><button type="submit">Invite</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="identity-dialog" class="settings-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Your display name</strong><button id="close-identity-dialog" type="button">×</button></div>
+      <form id="identity-form">
+        <p>Choose how your name appears in conversations.</p>
+        <label for="user-name-input">Your display name</label>
+        <input id="user-name-input" type="text" maxlength="40" required />
+        <div class="settings-actions"><button id="cancel-identity" type="button">Cancel</button><button type="submit">Save</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="user-profile-dialog" class="configuration-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>About Me</strong><button id="close-user-profile-dialog" type="button">×</button></div>
+      <form id="user-profile-form">
+        <div class="config-intro"><strong>One profile shared across AI Messenger</strong><span>Your name, image, and personalization stay consistent in the contact list and every chat. Avoid passwords, financial details, or other sensitive information.</span></div>
+        <div class="about-me-identity-row"><div class="about-me-picture"><img id="about-me-picture-preview" class="hidden" alt="Your profile preview" /><span id="about-me-picture-fallback">👤</span></div><div><strong>Your profile image</strong><div class="about-me-picture-actions"><button id="about-me-change-picture" type="button">Change picture…</button><button id="about-me-reset-picture" type="button">Use default</button></div></div></div>
+        <label for="about-me-name">Display name</label>
+        <input id="about-me-name" type="text" maxlength="40" required />
+        <label for="user-profile-about">About me</label>
+        <textarea id="user-profile-about" rows="3" maxlength="4000" placeholder="Your role, background, responsibilities, experience, and interests…"></textarea>
+        <label for="user-profile-goals">What I want to achieve</label>
+        <textarea id="user-profile-goals" rows="3" maxlength="4000" placeholder="Short-term goals, long-term outcomes, and what success looks like…"></textarea>
+        <label for="user-profile-context">Current work and context</label>
+        <textarea id="user-profile-context" rows="3" maxlength="4000" placeholder="Projects, routines, tools, recurring tasks, and relevant circumstances…"></textarea>
+        <label for="user-profile-style">How I prefer to work</label>
+        <textarea id="user-profile-style" rows="3" maxlength="4000" placeholder="Preferred tone, detail level, format, pace, and how you make decisions…"></textarea>
+        <label for="user-profile-assistance">Where I want AI guidance</label>
+        <textarea id="user-profile-assistance" rows="3" maxlength="4000" placeholder="Tasks to help with, skills to develop, reminders, planning, research, or accountability…"></textarea>
+        <label for="user-profile-boundaries">Preferences and boundaries</label>
+        <textarea id="user-profile-boundaries" rows="3" maxlength="4000" placeholder="Things to avoid, assumptions to check, accessibility needs, or important constraints…"></textarea>
+        <div class="settings-actions"><button id="reset-user-profile" type="button">Clear profile fields</button><span></span><button id="cancel-user-profile" type="button">Cancel</button><button type="submit">Save About Me</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="model-name-dialog" class="settings-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI display name</strong><button id="close-model-name-dialog" type="button">×</button></div>
+      <form id="model-name-form">
+        <p>Choose a display name for <strong id="model-name-identifier"></strong>. The model always remains visible in parentheses.</p>
+        <label for="model-custom-name">AI display name</label>
+        <input id="model-custom-name" type="text" maxlength="40" required />
+        <div class="settings-actions"><button id="reset-model-name" type="button">Use Default</button><button id="cancel-model-name" type="button">Cancel</button><button type="submit">Save</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="history-dialog" class="history-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong id="history-dialog-title">Chat History</strong><button id="close-history-dialog" type="button">×</button></div>
+      <div class="history-warning"><strong>⚠ Historical context warning</strong><span>Loading a historical chat may add outdated context to the current thread. Review older information before relying on it.</span></div>
+      <div id="history-list" class="history-list"></div>
+      <div class="history-actions"><button id="cancel-history" type="button">Close</button></div>
+    </dialog>
+
+    <dialog id="configuration-dialog" class="configuration-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Assistant configuration</strong><button id="close-configuration-dialog" type="button">×</button></div>
+      <form id="configuration-form">
+        <div class="config-intro"><strong>AI profile</strong><span id="configuration-model-label">These settings apply only to the selected AI profile.</span></div>
+        <label for="soul-prompt">Soul prompt <code>soul.md</code></label>
+        <textarea id="soul-prompt" rows="4" placeholder="Core values, identity, boundaries, and enduring behavior…"></textarea>
+        <button id="import-soul" class="config-file-button" type="button">Import soul.md…</button>
+        <input id="soul-file-input" class="hidden-file-input" type="file" accept=".md,.txt,text/plain,text/markdown" />
+
+        <label for="personality-prompt">Personality prompt</label>
+        <textarea id="personality-prompt" rows="4" placeholder="Tone, conversational style, temperament, preferences…"></textarea>
+        <button id="import-personality" class="config-file-button" type="button">Import personality file…</button>
+        <input id="personality-file-input" class="hidden-file-input" type="file" accept=".md,.txt,text/plain,text/markdown" />
+
+        <label for="assistant-gender">AI Friend language gender</label>
+        <select id="assistant-gender"><option value="neutral">Neutral</option><option value="feminine">Feminine</option><option value="masculine">Masculine</option></select>
+        <p class="field-note">Controls this AI’s own grammatical gender and self-reference where the conversation language uses gender. It does not set or infer the user’s gender.</p>
+
+        <label for="tone-prompt">Custom tone prompt</label>
+        <textarea id="tone-prompt" rows="3" placeholder="Additional speaking style and tone guidance for this AI profile…"></textarea>
+
+        <label for="custom-instructions">Custom instructions</label>
+        <textarea id="custom-instructions" rows="4" placeholder="Additional rules for this assistant…"></textarea>
+
+        <div class="skill-heading"><div><strong>Instruction skills</strong><span>Markdown/text skills become model instructions. They do not grant executable tools or computer access.</span></div><button id="add-skills" type="button">Add skill files…</button></div>
+        <input id="skill-file-input" class="hidden-file-input" type="file" multiple accept=".md,.txt,text/plain,text/markdown" />
+        <div id="skill-list" class="skill-list"><span class="empty-skills">No skill files added.</span></div>
+
+        <div class="config-map"><strong>Mapped to Ollama:</strong><code>POST /api/chat → messages[0].role = "system"</code></div>
+        <div class="settings-actions"><button id="reset-configuration" type="button">Reset</button><span></span><button id="cancel-configuration" type="button">Cancel</button><button type="submit">Save</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="features-dialog" class="info-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger Features</strong><button id="close-features-dialog" type="button">×</button></div>
+      <div class="features-content">
+        <h2>AI Messenger V1</h2>
+        <ul>
+          <li>Private conversations powered by AI running on your device</li>
+          <li>Installed models organized as classic Messenger contacts</li>
+          <li>Group conversations with multiple local AI assistants</li>
+          <li>Specialist teams that combine OCR, reasoning/math, vision, creative, and writing models in one shared workflow</li>
+          <li>Create contacts with a model, name, picture, tone, Soul, and skills prompt</li>
+          <li>A guided personal profile available to every model for better personalization</li>
+          <li>Attach chat to the contact list, switch models in one window, and use right-aligned Detach/close controls</li>
+          <li>Concurrent model-specific chat windows</li>
+          <li>Saved chat history and fresh conversations whenever you want them</li>
+          <li>Visual assistance using snapshots of your desktop or an application window</li>
+          <li>Image sharing through upload, drag-and-drop, or paste</li>
+          <li>Emoji reactions and classic Messenger-style chat controls</li>
+          <li>Individual AI names by right-clicking model contacts</li>
+          <li>A different custom profile picture for each installed AI model</li>
+          <li>Separate Kind, Sarcastic, To the point, or Helpful tone for each model</li>
+          <li>Neutral, feminine, or masculine language forms for each AI Friend</li>
+          <li>Per-model Soul, personality, custom instructions, and skills</li>
+          <li>Light and dark themes with adjustable text sizing</li>
+          <li>Cut, copy, and paste controls for easy conversation editing</li>
+          <li>Your AI buddy's current model displayed beside its custom name</li>
+          <li>Specialty-model notices for OCR, embedding, and coding assistants</li>
+          <li>Local chat storage with no built-in analytics</li>
+          <li>Current local date and time context supplied from the device clock</li>
+          <li>Time-based idle suspension with a clock status icon; right-click any assistant to suspend or wake it</li>
+        </ul>
+      </div>
+      <div class="history-actions"><button id="close-features" type="button">Close</button></div>
+    </dialog>
+
+    <dialog id="about-us-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>About AI Messenger</strong><button type="button" data-close="about-us-dialog">×</button></div>
+      <div class="info-content"><h2>AI Messenger V1</h2><p>Local AI desktop assistant</p><p>Developed by Jesada Chandraprasert and Sarawin Chandraprasert.</p></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="about-us-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="license-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger License</strong><button type="button" data-close="license-dialog">×</button></div>
+      <div class="info-content"><h2>PolyForm Noncommercial License 1.0.0</h2><p>AI Messenger is licensed under the <a href="https://polyformproject.org/licenses/noncommercial/1.0.0/" target="_blank" rel="noreferrer">PolyForm Noncommercial License 1.0.0</a>.</p><p>Noncommercial use, modification, and redistribution are permitted only when these license terms, attribution notices, and the copyright notice are preserved. Commercial use, commercial copying, commercial modification, commercial redistribution, resale, paid hosting, or inclusion in a commercial product requires a separate written license from Jesada Chandraprasert.</p><p><strong>Required Notice:</strong> Copyright 2026 Jesada Chandraprasert.</p><p>Ollama, Electron, Chromium, Node.js, downloaded models, and other third-party components remain under their own licenses. AI Messenger is not affiliated with Microsoft or the former MSN Messenger service.</p></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="license-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="terms-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger Terms of Service</strong><button type="button" data-close="terms-dialog">×</button></div>
+      <div class="info-content"><h2>Use of the application</h2><p>By installing, copying, launching, or using AI Messenger, you agree to the <a href="TERMS.md" target="_blank" rel="noreferrer">AI Messenger Terms of Use</a> and the PolyForm Noncommercial License.</p><p>AI Messenger is a local desktop interface layer for Ollama or another compatible local inference server. It is not a hosted AI service and does not relicense Ollama or any model.</p><p>The application is provided “as is.” Model output can be inaccurate, incomplete, or unsuitable for a particular purpose. Do not use it as professional, legal, medical, financial, or emergency advice. Do not share secrets or sensitive information unless you understand the risks.</p><p>Running several assistants, vision requests, or group chats can substantially increase CPU, GPU, memory, battery, storage, and fan use.</p></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="terms-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="user-data-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger User Data</strong><button type="button" data-close="user-data-dialog">×</button></div>
+      <div class="info-content"><h2>Local-first data behavior</h2><ul><li>AI Messenger has no built-in telemetry, analytics, advertising, developer reporting, or remote user account.</li><li>Chat messages, attachments, profiles, settings, and history remain on the user's device.</li><li>Prompts and explicitly attached images/files are sent to the local model endpoint configured by the user.</li><li>The app does not continuously record the desktop. A snapshot is captured only after the user chooses to share it.</li><li>Users are responsible for device security, Ollama configuration, downloaded models, backups, and any network changes.</li><li>Removing local application data can remove saved chats and settings; export or back up anything the user wants to retain.</li></ul></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="user-data-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="contact-us-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Contact AI Messenger</strong><button type="button" data-close="contact-us-dialog">×</button></div>
+      <div class="info-content"><h2>Contact Us</h2><p>For questions, feedback, or support, email <a href="mailto:retroaimessenger@gmail.com">retroaimessenger@gmail.com</a>.</p></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="contact-us-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="model-guide-dialog" class="info-dialog model-guide-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Installed Model Guide</strong><button id="close-model-guide-dialog" type="button">×</button></div>
+      <div id="model-guide-content" class="model-guide-content"><p>Reading installed models…</p></div>
+      <div class="history-actions"><button id="refresh-model-guide" type="button">Refresh</button><span></span><button id="close-model-guide" type="button">Close</button></div>
+    </dialog>
+
+    <dialog id="user-guide-dialog" class="info-dialog legal-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger User Guide</strong><button type="button" data-close="user-guide-dialog">×</button></div>
+      <div class="info-content"><h2>Getting started</h2><ol><li>Start Ollama, then open Tools → Setup local model. Use automatic detection or enter the local server address and choose Save &amp; Connect.</li><li>Open Help → Installed Model Guide to see each installed model's size and capabilities.</li><li>Click a contact to open a chat. In a one-to-one chat, use the model picker to choose the local model.</li><li>Use Tools → About Me to set your name, picture, background, goals, work style, and guidance preferences.</li><li>Use the AI profile menu or right-click a contact to set its name, picture, tone, gender, Soul, personality, and skills.</li><li>In the main contact list, figurine markers identify capabilities: glasses for OCR or vision, a paintbrush for image generation, and a lightbulb for reasoning models. The timestamp shows the most recent message; after a day passes it includes the date and time.</li><li>Type a message and press Send or Enter. Your message appears immediately; Stop ends active generations. Thinking controls Fast or Deep response effort where supported.</li><li>Use Send Files for images or text files, and Share view for a user-selected desktop or window snapshot. Only explicitly attached content is sent to the local model.</li><li>Use Invite to create a conversation with multiple assistants. In a one-to-one chat, Invite creates a new group. In an existing group, Invite adds or removes assistants from that same group and retains its name and saved history; messages from removed assistants remain visible with gray names. In a team that includes Chief of Staff, address the Chief with the desired outcome, such as “interpret this poem,” and attach the source. Chief of Staff identifies the right specialists, delegates the work in the shared thread, and synthesizes their real replies. You do not need to micromanage each assistant.</li><li>Use the chevron to attach the chat to the contact list. Use Detach to give it its own window; other model tasks continue in the background.</li><li>File → New Chat starts a fresh visible session while saved history remains available through Chat History. Loading old history can add outdated context.</li><li>Unused assistants suspend after five minutes and show a clock icon; after ten minutes they move Offline. Click the assistant to wake it. Right-click an assistant to suspend or wake it manually.</li><li>Use Actions for light/dark mode and Tools for font size, setup, and assistant controls. Help contains the model guide, features, setup guide, license, terms, and user-data information.</li><li>To permanently remove AI Messenger data on Windows, quit the app, open <code>%APPDATA%\Retro Messenger Assistant</code> in File Explorer, and delete that folder. This removes the encrypted vault, chats, profiles, and settings.</li></ol></div>
+      <div class="dialog-actions padded"><span></span><button type="button" data-close="user-guide-dialog">Close</button></div>
+    </dialog>
+
+    <dialog id="setup-dialog" class="setup-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>Local Model Setup</strong><button id="close-setup-dialog" type="button">×</button></div>
+      <form id="setup-form">
+        <p class="setup-intro">Choose automatic Ollama detection or configure a local-compatible server. Prompts and attached images are sent to the endpoint you select.</p>
+        <p class="setup-warning"><strong>Before saving:</strong> Keep the server bound to localhost. Larger models need more memory; longer keep-alive improves reload time but uses memory.</p>
+        <div class="setup-field">
+          <label for="provider-input">API type</label><button type="button" class="field-info" data-info="Choose Ollama for the native Ollama API. Choose OpenAI-compatible for LM Studio, llama.cpp, or another local server exposing /v1 endpoints." aria-label="API type help">i</button>
+          <select id="provider-input"><option value="ollama">Ollama</option><option value="openai">OpenAI-compatible local server</option></select>
+        </div>
+        <div class="setup-field">
+          <label for="base-url-input">Server URL</label><button type="button" class="field-info" data-info="The local address of your model server. Ollama normally uses http://127.0.0.1:11434. OpenAI-compatible servers often use http://127.0.0.1:1234/v1." aria-label="Server URL help">i</button>
+          <input id="base-url-input" type="url" required />
+        </div>
+        <div class="setup-field">
+          <label for="preferred-model-input">Preferred model</label><button type="button" class="field-info" data-info="Optional model identifier to select automatically. Choose a model that fits your available RAM or VRAM." aria-label="Preferred model help">i</button>
+          <input id="preferred-model-input" type="text" placeholder="qwen3.6:latest" />
+        </div>
+        <div class="setup-field">
+          <label for="api-key-input">API key</label><button type="button" class="field-info" data-info="Local Ollama does not require an API key. If an OpenAI-compatible local server requires one, AI Messenger stores it separately inside your standalone passphrase-encrypted vault." aria-label="API key help">i</button>
+          <input id="api-key-input" type="password" autocomplete="off" placeholder="Optional" />
+        </div>
+        <div class="setup-row">
+          <div class="setup-field"><label for="timeout-input">Timeout (seconds)</label><button type="button" class="field-info" data-info="How long AI Messenger waits for the local model. Large models may need 120 seconds or more." aria-label="Timeout help">i</button><input id="timeout-input" type="number" min="10" max="600" /></div>
+          <div class="setup-field"><label for="keep-alive-input">Ollama keep-alive</label><button type="button" class="field-info" data-info="How long Ollama keeps the model loaded after a reply. Longer values reduce reloads but consume memory; 0 unloads immediately." aria-label="Keep-alive help">i</button><input id="keep-alive-input" type="text" placeholder="10m" /></div>
+        </div>
+        <label class="vision-check"><input id="vision-enabled-input" type="checkbox" /> This server/model accepts images <button type="button" class="field-info" data-info="Enable this for OpenAI-compatible vision models. Native Ollama models report vision support automatically." aria-label="Vision support help">i</button></label>
+        <div class="setup-detect-row"><button id="detect-ollama" type="button">Detect Ollama automatically</button><span>Checks only the local Ollama service.</span></div>
+        <div id="setup-test-result" class="setup-test-result">Choose automatic detection or configure the local server manually.</div>
+        <div class="settings-actions"><button id="test-connection" type="button">Test Connection</button><span></span><button id="cancel-setup" type="button">Cancel</button><button type="submit">Save & Connect</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="setup-guide-dialog" class="info-dialog setup-guide-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong>AI Messenger Setup Guide</strong><button id="close-setup-guide-dialog" type="button">×</button></div>
+      <div class="guide-content">
+        <h2>Welcome to AI Messenger</h2>
+        <ol>
+          <li><strong>Start your local model server.</strong><span>For Ollama, install it, run it, and download at least one chat model. Other local apps must expose an OpenAI-compatible <code>/v1</code> API.</span></li>
+          <li><strong>Open Tools → Setup local model.</strong><span>Choose Detect Ollama automatically or enter the server URL manually. The Ollama default is <code>http://127.0.0.1:11434</code>; keep it bound to localhost.</span></li>
+          <li><strong>Match the model to your hardware.</strong><span>Use the Installed Model Guide for size and capability information. Larger models require more RAM or VRAM and take longer to load.</span></li>
+          <li><strong>Test the connection.</strong><span>Use Test Connection before saving. Then choose a discovered model from the Model selector at the top of the chat.</span></li>
+          <li><strong>Customize each assistant.</strong><span>Use the AI picture arrow for that model’s name and picture. Tone, language gender, Soul, personality, custom instructions, and skills are also saved to the selected model only.</span></li>
+          <li><strong>Use visual assistance deliberately.</strong><span>Activities captures a selected screen/window snapshot. Send Picture attaches an image. Images go only to the configured local endpoint.</span></li>
+          <li><strong>Manage context.</strong><span>File → New Chat starts clean. Chat History can restore text context, but historical information may be outdated.</span></li>
+        </ol>
+        <p class="privacy-guide"><strong>Privacy:</strong> AI Messenger restricts model connections to this device. Chat state, preferences, configuration, and optional server keys are protected by your standalone vault passphrase.</p>
+      </div>
+      <div class="settings-actions guide-actions"><button id="dismiss-setup-guide" type="button">Close</button><span></span><button id="open-setup-from-guide" type="button">Open Setup</button></div>
+    </dialog>
+
+    <dialog id="vault-dialog" class="settings-dialog vault-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong id="vault-dialog-title">Unlock private vault</strong></div>
+      <form id="vault-form">
+        <p id="vault-intro">Enter your vault passphrase to open AI Messenger.</p>
+        <label for="vault-passphrase">Vault passphrase</label>
+        <input id="vault-passphrase" type="password" minlength="10" maxlength="1024" autocomplete="current-password" required />
+        <div id="vault-confirm-group">
+          <label for="vault-passphrase-confirm">Confirm passphrase</label>
+          <input id="vault-passphrase-confirm" type="password" minlength="10" maxlength="1024" autocomplete="new-password" required />
+        </div>
+        <label class="remember-vault" for="vault-remember">
+          <input id="vault-remember" type="checkbox" />
+          <span><strong>Don’t ask again on this device</strong><small>Stores an automatic unlock key locally. Anyone with access to your device account may be able to open the vault.</small></span>
+        </label>
+        <div id="vault-error" class="setup-test-result hidden" role="alert"></div>
+        <div class="settings-actions"><button id="quit-from-vault" type="button">Quit</button><span></span><button id="unlock-vault" type="submit">Unlock</button></div>
+      </form>
+    </dialog>
+
+    <script src="model-guide.js"></script>
+    <script src="renderer.js"></script>
+  </body>
+</html>

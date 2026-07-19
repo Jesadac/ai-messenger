@@ -124,6 +124,7 @@ html[data-theme="dark"] dialog { color: #eef5fb; background: #26343f; border-col
 .model-copy strong { font-size: calc(10px * var(--font-multiplier)); }
 .model-copy span { font-size: calc(8px * var(--font-multiplier)); }
 .model-copy .last-message-time { color: #8a6d45; font-size: calc(7px * var(--font-multiplier)); line-height: 1.1; }
+.external-website-link { padding: 0; border: 0; color: #145d9b; background: transparent; font: inherit; text-decoration: underline; cursor: pointer; }
 .chat-search-control { min-width: 0; flex: 1; display: flex; align-items: center; gap: 4px; padding: 0 5px; border: 1px solid #7f9db9; background: #fff; }
 .chat-search-control > span { color: #53758d; font-size: 14px; line-height: 1; }
 .chat-search-control input { min-width: 0; flex: 1; height: 25px; padding: 3px 0; border: 0; outline: 0; }

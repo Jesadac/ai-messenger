@@ -2,6 +2,8 @@
 
 A local-first macOS desktop chat window inspired by early-2000s instant messengers. It connects to Ollama at `127.0.0.1:11434` and can attach a user-selected desktop snapshot to a vision-capable model.
 
+Project information and updates: [aimessenger.sermocast.com](https://aimessenger.sermocast.com).
+
 ## Read before installing
 
 By installing, copying, or using AI Messenger, you agree to the [AI Messenger Terms of Use](TERMS.md) and the [PolyForm Noncommercial License 1.0.0](LICENSE.md). If you do not agree, do not install or use the application.

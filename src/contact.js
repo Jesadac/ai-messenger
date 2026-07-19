@@ -1723,6 +1723,7 @@ const coffeeBanner = $('#coffee-banner');
 if (localStorage.getItem(COFFEE_BANNER_CLOSED_KEY) === '1') coffeeBanner.classList.add('hidden');
 $('#close-coffee-banner').addEventListener('click', () => { coffeeBanner.classList.add('hidden'); localStorage.setItem(COFFEE_BANNER_CLOSED_KEY, '1'); });
 $('#coffee-banner-link').addEventListener('click', () => window.retro.openExternal('https://buymeacoffee.com/jesadac').catch((error) => setStatus('offline', error.message)));
+$$('[data-external-url]').forEach((button) => button.addEventListener('click', () => window.retro.openExternal(button.dataset.externalUrl).catch((error) => setStatus('offline', error.message))));
 
 window.retro.onStateChanged((state, sections) => {
   applyState(state, sections);

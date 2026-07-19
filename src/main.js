@@ -762,7 +762,7 @@ handle('profile:activity', (profileId, model) => {
   return { ok: true };
 });
 handle('shell:open-external', async (url) => {
-  if (url !== 'https://buymeacoffee.com/jesadac') throw new Error('External link blocked.');
+  if (!['https://buymeacoffee.com/jesadac', 'https://aimessenger.sermocast.com'].includes(url)) throw new Error('External link blocked.');
   await shell.openExternal(url);
   return { ok: true };
 });

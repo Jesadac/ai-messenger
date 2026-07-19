@@ -1850,6 +1850,10 @@ document.querySelectorAll('[data-command]').forEach((button) => {
   });
 });
 
+document.querySelectorAll('[data-external-url]').forEach((button) => {
+  button.addEventListener('click', () => window.retro.openExternal(button.dataset.externalUrl).catch((error) => reportBackgroundError('Could not open website', error)));
+});
+
 document.addEventListener('click', (event) => {
   if (!event.target.closest('.menu-root')) closeMenus();
   if (!event.target.closest('.picture-card')) closeProfileMenus();

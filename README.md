@@ -4,6 +4,10 @@ A local-first macOS desktop chat window inspired by early-2000s instant messenge
 
 Project information and updates: [aimessenger.sermocast.com](https://aimessenger.sermocast.com).
 
+## Downloads
+
+Download the macOS (Apple silicon), Windows x64, or Linux x64 package from the [latest release](https://github.com/Jesadac/ai-messenger/releases/latest).
+
 ## Read before installing
 
 By installing, copying, or using AI Messenger, you agree to the [AI Messenger Terms of Use](TERMS.md) and the [PolyForm Noncommercial License 1.0.0](LICENSE.md). If you do not agree, do not install or use the application.

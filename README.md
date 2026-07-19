@@ -94,6 +94,10 @@ AI Messenger has no built-in telemetry, analytics, advertising, developer report
 
 The app does not use macOS Keychain, Windows Credential Manager, or Linux keyrings. Optional non-Ollama credentials are kept in the app’s standalone encrypted vault. Protect the computer account and vault passphrase, and do not share sensitive information unless you understand the risks.
 
+## Remove local app data on Windows
+
+Quit AI Messenger, open `%APPDATA%\Retro Messenger Assistant` in File Explorer, and delete that folder. This permanently removes the encrypted vault, chat history, profiles, settings, and any saved local credentials. It does not remove Ollama or any models installed by Ollama.
+
 ## Local date and time
 
 Each model request includes the computer’s current local date, time, weekday, and time zone so assistants can answer basic questions about “today” or “tomorrow.” This is read from the device clock and is not guaranteed to be accurate; it is not used as an authoritative source for deadlines or other high-stakes decisions.

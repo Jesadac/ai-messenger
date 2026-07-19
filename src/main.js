@@ -8,7 +8,13 @@ const { createKey, decryptWithKey, encryptWithKey, unlockEnvelope } = require('.
 // a platform credential store. Chromium otherwise creates a "Safe Storage"
 // entry in macOS Keychain even though the app never calls Electron safeStorage.
 if (process.platform === 'darwin') app.commandLine.appendSwitch('use-mock-keychain');
-if (process.platform === 'linux') app.commandLine.appendSwitch('password-store', 'basic');
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('password-store', 'basic');
+  // Portable Linux ZIPs cannot retain a root-owned, setuid chrome-sandbox
+  // helper after extraction. Keep Chromium's namespace sandbox available
+  // without requiring users to run the app with --no-sandbox or sudo.
+  app.commandLine.appendSwitch('disable-setuid-sandbox');
+}
 
 const captureCache = new Map();
 const modelDiscoveryCache = new Map();

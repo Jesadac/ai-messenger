@@ -9,6 +9,7 @@ $site = [
     'docs_url' => 'https://github.com/Jesadac/ai-messenger/blob/main/distribution/USER_GUIDE.md',
     'terms_url' => 'https://github.com/Jesadac/ai-messenger/blob/main/TERMS.md',
     'license_url' => 'https://github.com/Jesadac/ai-messenger/blob/main/LICENSE.md',
+    'coffee_url' => 'https://buymeacoffee.com/jesadac',
     'contact_email' => 'retroaimessenger@gmail.com',
     'year' => date('Y'),
 ];

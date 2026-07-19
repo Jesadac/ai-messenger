@@ -15,7 +15,8 @@ The download buttons point to GitHub releases through `$site['download_url']`.
 - `index.php` - landing page content and PHP sections.
 - `config.php` - editable site name, links, and contact values.
 - `assets/styles.css` - responsive visual design.
-- `assets/script.js` - mobile navigation behavior.
 - `assets/ai-messenger-1024.png` - app icon used by the website.
+- `assets/buy-me-a-coffee-qr.png` - support QR code.
+- `assets/product/` - product screenshots used on the landing page.
 
 AI Messenger requires Ollama or another compatible local AI server. The website does not host installers directly.

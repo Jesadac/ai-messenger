@@ -11,6 +11,7 @@ const distributionRoot = process.env.AIM_RELEASE_DIR || path.join(root, 'distrib
 const packageDir = path.join(distributionRoot, 'deploymentpackages');
 const internalDir = path.join(root, 'internal-release-records');
 const requiredDocs = ['README.md', 'LICENSE.md', 'TERMS.md', 'SECURITY.md', 'DISTRIBUTION.md', 'THIRD-PARTY-NOTICES.md', 'RELEASE_CHECKLIST.md'];
+const mirroredPackageDocs = ['LICENSE.md', 'TERMS.md', 'THIRD-PARTY-NOTICES.md'];
 const packages = [
   'AI-Messenger-mac-arm64.zip',
   'AI-Messenger-windows-x64.zip',
@@ -30,6 +31,17 @@ function sha256(file) {
 
 function archiveEntries(file) {
   return execFileSync('unzip', ['-Z1', file], { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean);
+}
+
+function verifyMirroredPackageDocs() {
+  const mismatches = [];
+  for (const file of mirroredPackageDocs) {
+    const canonicalPath = path.join(root, file);
+    const distributionPath = path.join(packageDir, file);
+    if (!fs.existsSync(distributionPath)) mismatches.push(`${file} is missing from deploymentpackages`);
+    else if (fs.readFileSync(canonicalPath, 'utf8') !== fs.readFileSync(distributionPath, 'utf8')) mismatches.push(`${file} differs from the canonical project copy`);
+  }
+  return mismatches;
 }
 
 function scanPackagedBundles() {
@@ -62,6 +74,8 @@ function main() {
   const missingDocs = requiredDocs.filter((file) => !fs.existsSync(path.join(root, file)));
   if (missingDocs.length) throw new Error(`Missing release documents: ${missingDocs.join(', ')}`);
   if (!fs.existsSync(packageDir)) throw new Error(`Deployment folder not found: ${packageDir}`);
+  const mirroredDocMismatches = verifyMirroredPackageDocs();
+  if (mirroredDocMismatches.length) throw new Error(`Distribution documentation is out of sync:\n${mirroredDocMismatches.join('\n')}`);
 
   const checksums = [];
   const archiveFindings = [];

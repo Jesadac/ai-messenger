@@ -1,8 +1,19 @@
 # AI Messenger
 
-A local-first macOS desktop chat window inspired by early-2000s instant messengers. It connects to Ollama at `127.0.0.1:11434` and can attach a user-selected desktop snapshot to a vision-capable model.
+A local-first cross-platform desktop chat window inspired by early-2000s instant messengers. It connects to Ollama at `127.0.0.1:11434` by default and can attach a user-selected desktop snapshot to a vision-capable model.
 
 Project information and updates: [aimessenger.sermocast.com](https://aimessenger.sermocast.com).
+
+## Download and install
+
+Download the current package from the [latest release](https://github.com/Jesadac/ai-messenger/releases/latest).
+
+1. Install Ollama and download at least one model, or start another compatible local model server.
+2. Choose the package for your computer: `mac-arm64` for Apple-silicon Macs, `windows-x64` for 64-bit Windows, or `linux-x64` for 64-bit Linux.
+3. Extract the package and launch the application. On macOS, move **Retro Messenger Assistant.app** to Applications; on Windows, run `ai-messenger.exe`; on Linux, run `./ai-messenger` from the extracted folder.
+4. In AI Messenger, open **Tools → Setup local model**, choose automatic detection or enter your local server address, then select **Test Connection** and **Save & Connect**.
+
+See the [User Guide](distribution/USER_GUIDE.md) for the full feature reference.
 
 ## Read before installing
 
@@ -12,7 +23,7 @@ AI Messenger is an interface layer (desktop client) for Ollama or another compat
 
 AI Messenger may be used for personal, educational, nonprofit, workplace, and business purposes. You may not redistribute, repackage, rebrand, resell, sublicense, modify for distribution, host, or bundle the application into another product or service without prior written permission from the copyright holder.
 
-There is no telemetry, analytics, advertising, or developer reporting. Chat content, attachments, profiles, settings, and history remain on the user's device. The app communicates with the local endpoint configured by the user; if the user attaches an image or file, it is sent to that local model for processing. Users are responsible for the security of their device, Ollama installation, downloaded models, and any network changes they make.
+There is no telemetry, analytics, advertising, or developer reporting. Chat content, attachments, profiles, settings, and history remain on the user's device. The app communicates with the local endpoint configured by the user; if the user attaches an image or file, it is sent to that local model for processing. Users are responsible for the security of their device, local model server, downloaded models, and any network changes they make.
 
 Running several assistant profiles or group chats can use substantial CPU, GPU, memory, and power. Resource use depends on the selected models and hardware; disable assistants or stop generations when they are not needed.
 
@@ -20,29 +31,12 @@ AI output can be inaccurate or unsafe. Do not rely on it as professional, legal,
 
 Developer credits: Jesada Chandraprasert and Sarawin Chandraprasert. Copyright © 2026 Jesada Chandraprasert. “AI Messenger” and the application artwork are not affiliated with Microsoft or the former MSN Messenger service.
 
-## Run it
-
-```bash
-npm install
-npm start
-```
-
-To create a Finder-launchable app:
-
-```bash
-npm run package:mac
-```
-
-Open the packaged application in `dist/`.
-
-The first time you choose **Share view**, macOS may request Screen Recording permission. If you grant it from System Settings, restart the app.
-
 ## Privacy behavior
 
-- The app connects only to the local Ollama address.
+- The app connects only to the configured local model-server endpoint.
 - It does not record the desktop continuously.
 - A snapshot is captured only after you click **Share view** and select a screen or window.
-- The snapshot is sent only with the next message, as base64 image data to Ollama.
+- The snapshot is sent only with the next message, as base64 image data to the configured local endpoint.
 - Chat history and settings are stored locally in the encrypted app vault; no analytics are included.
 
 ## Help and Tools reference
@@ -50,8 +44,6 @@ The first time you choose **Share view**, macOS may request Screen Recording per
 The contact list and chat windows expose the same Help pages: Installed Model Guide, Features, Setup Guide, User Guide, License, Terms of Service, and User Data. Tools → Setup local model and the shared font-size and vault controls are available in both windows; chat-only assistant tone and profile configuration remain in the chat window because they apply to its selected assistant.
 
 For docked chats, Detach and the close (×) control are aligned at the upper right of the conversation header. Detach opens the conversation in its own window; × closes only the chat pane and leaves the contact list open.
-
-See the [User Guide](distribution/USER_GUIDE.md) for feature instructions.
 
 The new-assistant flow includes editable Chief of Staff and Misfit presets. Chief of Staff translates broad requests into clear briefs, delegates work to specialist assistants, coordinates group-chat contributions, and checks results. Misfit provides playful, safe contrarian analysis and devil’s-advocate questions without malicious behavior.
 

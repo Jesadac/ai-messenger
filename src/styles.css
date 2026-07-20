@@ -1,4 +1,4 @@
-:root { font-family: Tahoma, "MS Sans Serif", sans-serif; color: #111; background: #fff; font-synthesis: none; }
+:root { color-scheme: light; font-family: Tahoma, "MS Sans Serif", sans-serif; color: #111; background: #fff; font-synthesis: none; }
 :root { --font-multiplier: 1; }
 html[data-font-size="50"] { --font-multiplier: .5; }
 html[data-font-size="100"] { --font-multiplier: 1; }
@@ -115,6 +115,7 @@ dialog { width: min(760px, calc(100vw - 40px)); max-height: calc(100vh - 50px); 
 
 @media (max-width: 760px) { .chat-layout { grid-template-columns: minmax(0, 1fr) 135px; padding-inline: 8px; gap: 7px; }.action-button { width: 52px; }.msn-wordmark { right: 18px; transform: scale(.82); transform-origin: right top; }.round-tools { display: none; }.recipient-line .model-picker { width: 125px; max-width: 125px; }.recipient-line .model-picker-label { padding-inline: 4px; }.classic-buddy { transform: scale(.82); }.duck-picture { font-size: 75px; } }
 
+html[data-theme="dark"] { color-scheme: dark; }
 html[data-theme="dark"] body { background: #111820; }
 html[data-theme="dark"] .msn-window { border-color: #153b66; background: #1b2733; box-shadow: inset 0 0 0 1px #416785; }
 html[data-theme="dark"] .xp-titlebar { background: linear-gradient(#335f8e, #173e69 70%, #2b537c); box-shadow: inset 0 2px 2px #638bb3; }
@@ -174,6 +175,8 @@ html[data-theme="dark"] .guide-content li span, html[data-theme="dark"] .setup-i
 html[data-theme="dark"] .setup-field > input, html[data-theme="dark"] .setup-field > select { color: #eef5fb; background: #111a22; border-color: #647b8d; }
 html[data-theme="dark"] .setup-test-result { color: #c4d2dc; background: #1b2934; border-color: #536b7d; }
 html[data-theme="dark"] .privacy-guide { background: #1b2e3c; border-color: #536f83; }
+html[data-theme="dark"] .action-button, html[data-theme="dark"] .compose-tools button, html[data-theme="dark"] .compose-buttons button, html[data-theme="dark"] .profile-picture-menu button, html[data-theme="dark"] .dialog-actions button, html[data-theme="dark"] .file-row button, html[data-theme="dark"] .settings-actions button { color: #edf5fa; border-color: #63798b; background: linear-gradient(#3b4e5e, #273744); }
+html[data-theme="dark"] .compose-buttons .stop-button { color: #ffd8d4; border-color: #b56e67; background: linear-gradient(#704039, #4a2a28); }
 .model-guide-content { max-height: calc(100vh - 125px); overflow-y: auto; padding: 12px 18px; }.model-guide-intro { margin: 0 0 9px; color: #536b7d; line-height: 1.4; }.model-guide-card { margin-bottom: 9px; padding: 9px 10px; border: 1px solid #9fb5c7; border-radius: 4px; background: #f8fcff; }.model-guide-card h3 { margin: 0 0 4px; color: #174f83; font-size: 13px; }.model-guide-meta { margin-bottom: 6px; color: #5f7383; font-size: 10px; }.model-guide-card p { margin: 3px 0; line-height: 1.35; }.model-guide-card .avoid { color: #923d35; }.model-guide-badge { display: inline-block; margin-left: 5px; padding: 1px 5px; border: 1px solid #8da9bd; border-radius: 8px; color: #315f7e; background: #e9f5fd; font-size: 9px; }html[data-theme="dark"] .model-guide-card { background: #192731; border-color: #577084; }html[data-theme="dark"] .model-guide-card h3 { color: #9fd0f5; }html[data-theme="dark"] .model-guide-card .avoid { color: #ffaaa2; }html[data-theme="dark"] .model-guide-intro { color: #b9c9d5; }
 
 .menu-trigger,

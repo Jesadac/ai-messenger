@@ -6,7 +6,7 @@
 2. Open Help → Installed Model Guide to see each installed model's size and capabilities.
 3. Click a contact to open a chat. In a one-to-one chat, use the model picker to choose the local model.
 4. Use Tools → About Me to set your name, picture, background, goals, work style, and guidance preferences.
-5. Use the AI profile menu or right-click a contact to set its name, picture, tone, gender, Soul, personality, and skills.
+5. Use the AI profile menu or right-click a contact to set its name, picture, tone, gender, Soul, personality, and skills. Tools → AI Profile Management exports custom or imported profiles to CSV and imports up to 200 profiles from an AI Messenger CSV; built-in preset profiles and images are not exported.
 6. In the main contact list, figurine markers identify capabilities: glasses for OCR or vision, a paintbrush for image generation, and a lightbulb for reasoning models. The timestamp shows the most recent message; after a day passes it includes the date and time.
 7. Use Search active chats in the main toolbar to find matching message text in the latest direct and group conversations. Select a result to open that chat.
 8. Type a message and press Send or Enter. Your message appears immediately; Stop ends active generations. Thinking controls Fast or Deep response effort where supported.

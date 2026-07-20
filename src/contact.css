@@ -160,3 +160,18 @@ html[data-theme="dark"] .group-count { border-color: #58758a; background: #24394
 .saved-group { grid-template-columns: 29px minmax(0, 1fr) auto; gap: 5px; padding: 3px 5px; }
 .saved-group-pictures { width: 27px; height: 27px; transform: scale(.84); transform-origin: left center; }
 .group-count { min-width: 18px; padding: 1px 4px; font-size: calc(8px * var(--font-multiplier)); }
+
+/* Compact role and model labels beneath each profile name. */
+.model-copy .model-meta { display: flex; align-items: baseline; gap: 4px; min-width: 0; }
+.model-copy .profile-role, .model-copy .profile-model { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.model-copy .profile-role { color: #315d7e; font-style: normal; font-weight: 600; }
+.model-copy .profile-model { color: #6b7c88; font-weight: normal; }
+html[data-theme="dark"] .model-copy .profile-role { color: #8fc9ed; }
+html[data-theme="dark"] .model-copy .profile-model { color: #bcd0df; }
+
+.menu-submenu { position: relative; }.menu-submenu-trigger b { font-size: 15px; font-weight: normal; line-height: 1; }.menu-submenu-content { position: absolute; z-index: 110; top: -3px; left: calc(100% - 3px); display: none; width: 155px; padding: 3px; border: 1px solid #777; background: var(--menu); box-shadow: 2px 3px 5px #30445a66; }.menu-submenu:hover .menu-submenu-content, .menu-submenu:focus-within .menu-submenu-content { display: block; }.tools-menu { overflow: visible; }
+
+/* Detail card: wait for an intentional hover and keep it above nearby contacts. */
+.model-hover-card { display: block; visibility: hidden; opacity: 0; background: #fffde9; transition: opacity .12s ease, visibility 0s linear .12s; }
+.model-contact:hover, .model-contact:focus-within { position: relative; z-index: 30; }
+.model-contact:hover .model-hover-card, .model-contact:focus-visible .model-hover-card { visibility: visible; opacity: 1; transition-delay: 3s, 3s; }

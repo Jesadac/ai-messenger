@@ -1,4 +1,4 @@
-const { app, BrowserWindow, clipboard, desktopCapturer, ipcMain, screen, session, shell, systemPreferences, WebContentsView, webContents } = require('electron');
+const { app, BrowserWindow, clipboard, desktopCapturer, dialog, ipcMain, screen, session, shell, systemPreferences, WebContentsView, webContents } = require('electron');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
@@ -832,6 +832,28 @@ handle('clipboard:read-text', () => clipboard.readText().slice(0, 1024 * 1024));
 handle('clipboard:write-text', (value) => {
   if (typeof value !== 'string' || value.length > 1024 * 1024) throw new Error('Clipboard text must be smaller than 1 MB.');
   clipboard.writeText(value);
+});
+handleWithEvent('profiles:export-csv', async (event, csv) => {
+  if (typeof csv !== 'string' || !csv.startsWith('name,model,') || Buffer.byteLength(csv, 'utf8') > 5 * 1024 * 1024) throw new Error('Invalid profile export data.');
+  const result = await dialog.showSaveDialog(BrowserWindow.fromWebContents(event.sender), {
+    title: 'Export AI profiles',
+    defaultPath: 'ai-messenger-profiles.csv',
+    filters: [{ name: 'CSV files', extensions: ['csv'] }],
+  });
+  if (result.canceled || !result.filePath) return { canceled: true };
+  await fs.writeFile(result.filePath, csv, { encoding: 'utf8', mode: 0o600 });
+  return { canceled: false, filePath: result.filePath };
+});
+handleWithEvent('profiles:import-csv', async (event) => {
+  const result = await dialog.showOpenDialog(BrowserWindow.fromWebContents(event.sender), {
+    title: 'Import AI profiles',
+    properties: ['openFile'],
+    filters: [{ name: 'CSV files', extensions: ['csv'] }],
+  });
+  if (result.canceled || !result.filePaths[0]) return { canceled: true };
+  const data = await fs.readFile(result.filePaths[0]);
+  if (data.length > 5 * 1024 * 1024) throw new Error('Choose a CSV smaller than 5 MB.');
+  return { canceled: false, content: data.toString('utf8') };
 });
 
 handle('chat:open-window', (profileId, model) => {

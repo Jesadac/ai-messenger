@@ -42,6 +42,8 @@ contextBridge.exposeInMainWorld('retro', {
   openExternal: (url) => ipcRenderer.invoke('shell:open-external', url),
   readClipboardText: () => ipcRenderer.invoke('clipboard:read-text'),
   writeClipboardText: (value) => ipcRenderer.invoke('clipboard:write-text', value),
+  exportProfilesCsv: (csv) => ipcRenderer.invoke('profiles:export-csv', csv),
+  importProfilesCsv: () => ipcRenderer.invoke('profiles:import-csv'),
   openChatWindow: (profileId, model) => ipcRenderer.invoke('chat:open-window', profileId, model),
   openGroupChat: (participants, groupName, groupId = '') => ipcRenderer.invoke('chat:open-group', participants, groupName, groupId),
   dockChat: (profileId, model) => ipcRenderer.invoke('chat:dock', profileId, model),

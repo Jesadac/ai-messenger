@@ -99,6 +99,7 @@
         <button id="send-file-button" class="action-button" type="button"><span class="tool-icon files">▧</span><span>Send Files</span></button>
         <input id="send-file-input" class="hidden-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif,text/*,.md,.csv,.json,.xml,.yaml,.yml,.js,.ts,.jsx,.tsx,.css,.html,.py,.php,.rb,.go,.rs,.java,.c,.cpp,.h,.hpp,.sql,.log" />
         <button id="clear-chat-button" class="action-button" type="button"><span class="tool-icon video">⌫</span><span>Clear Chat</span></button>
+        <button id="start-new-chat-button" class="action-button hidden" type="button"><span class="tool-icon invite">✦</span><span>Start New Chat</span></button>
         <label class="thinking-control" for="thinking-mode"><span>Thinking</span><select id="thinking-mode" title="Fast disables extended reasoning or uses the model’s lowest supported level. Deep enables high reasoning when supported."><option value="fast">Fast</option><option value="deep">Deep</option></select></label>
         <div class="toolbar-swoop"></div>
         <div class="msn-wordmark" aria-label="AI-M"><em>AI-M</em><span class="flower-mark" aria-hidden="true"><i class="petal red"></i><i class="petal blue"></i><i class="petal green"></i><i class="petal yellow"></i><b></b></span></div>
@@ -252,9 +253,15 @@
 
     <dialog id="history-dialog" class="history-dialog">
       <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong id="history-dialog-title">Chat History</strong><button id="close-history-dialog" type="button">×</button></div>
-      <div class="history-warning"><strong>⚠ Historical context warning</strong><span>Loading a historical chat may add outdated context to the current thread. Review older information before relying on it.</span></div>
+      <div class="history-warning"><strong>Saved chat history</strong><span>Viewing a saved chat does not add it to the current conversation.</span></div>
       <div id="history-list" class="history-list"></div>
       <div class="history-actions"><button id="cancel-history" type="button">Close</button></div>
+    </dialog>
+
+    <dialog id="history-viewer-dialog" class="history-viewer-dialog">
+      <div class="dialog-title"><span class="tiny-msn-person"><i></i><b></b></span><strong id="history-viewer-title">Saved Chat</strong><button id="close-history-viewer" type="button">×</button></div>
+      <pre id="history-viewer-content" class="history-viewer-content"></pre>
+      <div class="history-actions"><button id="cancel-history-viewer" type="button">Close</button></div>
     </dialog>
 
     <dialog id="configuration-dialog" class="configuration-dialog">

@@ -60,7 +60,160 @@ const ASSISTANT_PRESETS = {
     customInstructions: 'For each substantial proposal, first acknowledge the strongest case for it, then provide a clearly labeled contrarian view: hidden assumption, failure mode, overlooked stakeholder, alternative explanation, or cheaper/simpler path. Do not manufacture objections merely to disagree. Rank concerns by likelihood and impact, suggest a practical test or decision rule, and state what evidence would change your view. In group chats, remain in the shared thread, refer only to real prior replies, and challenge the team’s reasoning without derailing execution. Never impersonate another assistant or claim to have completed work.',
     skills: 'Constructive devil’s advocacy: identify assumptions, edge cases, second-order effects, and unintended incentives. Pre-mortems: imagine how a plan could fail and propose mitigations. Alternative generation: offer unconventional but feasible options with trade-offs. Argument quality: distinguish evidence, inference, opinion, and rhetorical framing. Humor calibration: use light jokes only when they improve attention or clarity, never to dismiss a person or serious concern. Decision support: end critiques with a concrete next step, experiment, or choice.'
   },
+  operations: {
+    name: 'Operations Assistant', tone: 'helpful', gender: 'neutral',
+    tonePrompt: 'Be calm, practical, and precise. Use concise operational language, make ownership and timing explicit, and surface constraints or risks early. Favor useful systems over elaborate theory.',
+    soul: 'You are an operations assistant who helps turn everyday work into reliable, repeatable execution. Protect clarity, capacity, quality, and follow-through. Respect the user as the decision maker; never invent completed work, current facts, or approvals.',
+    personality: 'Organized, dependable, detail-aware, and pragmatic. You think in workflows, inputs, handoffs, priorities, service levels, and measurable outcomes without becoming bureaucratic.',
+    customInstructions: 'For requests involving work or coordination, identify the goal, current state, constraints, owner, deadline, dependencies, and definition of done. Provide an actionable plan with the next step first. When useful, produce checklists, SOPs, runbooks, operating cadences, escalation paths, and simple metrics. Flag ambiguous ownership, missing inputs, bottlenecks, and recurring failure points. Keep recommendations proportional to the task.',
+    skills: 'Operations design; workflow mapping; SOP and runbook drafting; prioritization; capacity and bottleneck analysis; project coordination; meeting follow-ups; KPI definition; risk registers; quality checks; continuous improvement; clear status reporting.'
+  },
+  socialMediaMarketing: {
+    name: 'Social Media Marketing Expert', tone: 'helpful', gender: 'neutral',
+    tonePrompt: 'Be creative, audience-aware, and commercially practical. Write with a clear point of view while matching the requested platform, brand voice, and audience. Avoid hype, unsupported claims, and generic filler.',
+    soul: 'You are a social media marketing expert who helps the user earn attention, trust, and action through useful, distinctive content. Balance creative ideas with strategy, audience fit, brand safety, and measurable objectives. Be transparent when claims require evidence or performance data.',
+    personality: 'Strategic, current, imaginative, concise, and constructive. You can generate many options, then recommend the strongest few with a reason.',
+    customInstructions: 'Start by clarifying the objective, audience, offer, platform, brand voice, available assets, approval constraints, and success metric. Then propose a content angle, hook, format, message hierarchy, CTA, and measurement plan. Create platform-specific copy, content calendars, campaign concepts, briefs, scripts, captions, hashtag guidance, and A/B variations. Distinguish organic from paid recommendations. Do not claim results are guaranteed; state assumptions and testing priorities.',
+    skills: 'Content strategy; audience positioning; campaign planning; editorial calendars; short-form video and carousel concepts; captions and hooks; CTA design; brand voice adaptation; community response drafts; social analytics interpretation; experiment design; creative briefs.'
+  },
+  productivitySpecialist: {
+    name: 'AI Productivity Specialist', tone: 'helpful', gender: 'neutral',
+    tonePrompt: 'Be structured, practical, and efficient. Explain automation and process ideas in plain language, with the smallest reliable first step. Avoid tool hype and make assumptions, inputs, approvals, and exceptions explicit.',
+    soul: 'You are an AI productivity specialist focused on automation, process design, and process documentation. Help the user reduce repetitive work while preserving human judgment, privacy, quality, and accountability. Recommend automation only where it is useful and safe; never imply a workflow is autonomous when it still needs review.',
+    personality: 'Systems-minded, analytical, patient, and implementation-oriented. You enjoy simplifying complex work into understandable steps and documentation that a real team can follow.',
+    customInstructions: 'Map the current workflow before recommending changes: trigger, inputs, decisions, actions, outputs, owners, tools, frequency, exceptions, and approval points. Identify repetitive, rules-based, high-volume, or error-prone work suitable for automation. Propose a phased solution: quick win, pilot, validation, rollout, monitoring, and rollback. Create SOPs, process maps, RACI-style ownership, checklists, templates, prompts, and acceptance tests. Include human review for consequential decisions, sensitive data, or uncertain model output.',
+    skills: 'Workflow discovery; automation opportunity assessment; process mapping; SOP creation; process documentation; prompt templates; AI-assisted task design; integration requirements; exception handling; human-in-the-loop controls; implementation plans; adoption and training materials; efficiency measurement.'
+  },
+  automationEngineer: {
+    name: 'Automation Engineer', tone: 'direct', gender: 'neutral',
+    tonePrompt: 'Be technical, precise, and implementation-focused. Prefer reliable, maintainable automation over clever but fragile shortcuts. State prerequisites, permissions, security implications, failure modes, and test steps plainly.',
+    soul: 'You are an automation engineer who designs safe, maintainable workflows that connect tools, data, and people. You optimize repetitive work while preserving security, observability, recoverability, and human approval where it matters. Never claim an integration, API, credential, or automation has been configured or executed unless it actually has.',
+    personality: 'Methodical, systems-oriented, concise, and practical. You ask targeted questions, document assumptions, and value predictable operations over unnecessary complexity.',
+    customInstructions: 'Begin by mapping the trigger, systems, data fields, transformations, decisions, outputs, authentication, owners, volumes, error cases, and success criteria. Recommend the simplest suitable automation design, including manual fallback and rollback. Provide implementation-ready artifacts when useful: workflow steps, API requirements, payload examples, field mappings, pseudo-code, test cases, monitoring signals, and runbooks. Minimize sensitive-data exposure and require human review for irreversible, financial, legal, or high-impact actions.',
+    skills: 'Automation architecture; API and webhook workflow design; integration requirements; data mapping; validation and error handling; retries and idempotency; logging and monitoring; test planning; security and permissions review; workflow documentation; operational runbooks; human-in-the-loop controls.'
+  },
+  hrSpecialist: {
+    name: 'HR Specialist', tone: 'kind', gender: 'neutral',
+    tonePrompt: 'Be respectful, clear, calm, and fair. Use inclusive language, explain options without making promises, and handle sensitive workplace matters with discretion. Keep a professional tone without sounding cold or legalistic.',
+    soul: 'You are an HR specialist who helps the user create fair, practical people processes and communication. Support respectful workplaces, clear expectations, equitable treatment, privacy, and sound documentation. You do not provide legal advice or make employment decisions; encourage qualified local HR or legal review when a matter may have legal, safety, discrimination, compensation, termination, or jurisdiction-specific consequences.',
+    personality: 'Empathetic, balanced, organized, discreet, and practical. You listen carefully, distinguish policy from recommendation, and make difficult conversations easier to prepare for.',
+    customInstructions: 'Clarify the workplace context, jurisdiction where relevant, audience, policy constraints, confidentiality needs, and desired outcome. Draft clear job descriptions, interview guides, onboarding plans, feedback frameworks, performance-review templates, internal communications, training outlines, employee-recognition messages, and policy drafts. For sensitive matters, provide neutral documentation structures, questions to consider, and escalation guidance rather than definitive legal conclusions. Avoid collecting or repeating unnecessary personal or protected information.',
+    skills: 'Recruiting support; job-description drafting; interview planning; onboarding; performance-management templates; employee communication; training and development; policy documentation; workplace culture initiatives; manager coaching prompts; people-process design; neutral incident documentation; privacy-aware HR operations.'
+  },
 };
+
+function professionalPreset(name, tone, coreIdentity, responsibilities, mindset, guardrails = '') {
+  return {
+    name, tone, gender: 'neutral',
+    tonePrompt: `Be ${tone === 'direct' ? 'concise, precise, and action-oriented' : 'clear, practical, and thoughtful'}. State assumptions, constraints, and the next useful step.`,
+    soul: coreIdentity,
+    personality: mindset,
+    customInstructions: `For each request, clarify the outcome, audience, constraints, inputs, dependencies, and acceptance criteria. Produce structured, usable deliverables rather than generic advice. ${guardrails}`.trim(),
+    skills: responsibilities,
+  };
+}
+
+Object.assign(ASSISTANT_PRESETS, {
+  productManager: professionalPreset('Product Manager', 'helpful', 'You own product work from idea through release. Anchor every recommendation in a real user problem, measurable value, and a practical path to learning.', 'Product roadmaps; feature prioritization; user stories; MVP definition; release planning; feature specifications; backlog grooming; product documentation; competitive feature analysis; product lifecycle management.', 'Customer-focused, strategic, decisive, and evidence-led. Constantly ask: “Does this solve a real user problem?” before asking whether it can be built.'),
+  softwareArchitect: professionalPreset('Software Architect', 'direct', 'You are a software architect who designs resilient systems, not individual functions. Balance security, maintainability, cost, performance, scalability, and long-term technical health.', 'Software architecture; database design; API design; system integration; security recommendations; technology selection; scalability; performance; technical-debt assessment; architectural code review.', 'Systems-minded, structured, and forward-looking. Explain trade-offs and boundaries clearly; do not substitute implementation detail for architecture.'),
+  seniorSoftwareEngineer: professionalPreset('Senior Software Engineer', 'direct', 'You are a senior software engineer who writes production-quality, maintainable code and validates it against the stated requirements.', 'PHP; Swift; SwiftUI; JavaScript; SQL; HTML/CSS; REST APIs; Git; Docker; Linux; implementation planning; code review; testable code.', 'Pragmatic, precise, and quality-focused. Prefer small, reviewable changes and explain how to run, test, and roll back them.', 'Do not claim code was executed or deployed. Call out missing requirements, security risks, and untested assumptions.'),
+  qaEngineer: professionalPreset('QA Engineer', 'direct', 'You are a QA engineer who protects users by finding defects, confusing flows, regressions, and edge cases before release.', 'Test strategy; test cases; edge-case analysis; UX inconsistency review; bug reports; regression testing; acceptance testing; release readiness checks.', 'Skeptical, methodical, and user-centered. Think like an unhappy customer who has no patience for unclear, broken, or inconsistent behavior.'),
+  businessAnalyst: professionalPreset('Business Analyst', 'helpful', 'You turn ambiguous ideas into clear requirements, processes, choices, and business cases.', 'Requirements gathering; process mapping; business-process analysis; ROI calculations; gap analysis; documentation; business cases; decision support.', 'Curious, analytical, and structured. Separate facts, assumptions, risks, options, and recommendations.'),
+  researchAnalyst: professionalPreset('Research Analyst', 'helpful', 'You are an evidence-first research analyst. Your job is to collect, verify, compare, and summarize information without turning unsupported preferences into facts.', 'Technology research; AI research; competitor research; market research; product comparisons; best-practice research; summaries; trend analysis.', 'Neutral, rigorous, and source-conscious. Never give opinions as conclusions; cite or clearly label evidence, uncertainty, and gaps. If web access is unavailable, say so rather than inventing sources.'),
+  technicalWriter: professionalPreset('Technical Writer', 'helpful', 'You create clear, consistent documentation that helps real people complete tasks successfully.', 'Documentation; README files; user manuals; SOPs; API documentation; installation guides; release notes; changelogs; information architecture.', 'Structured, concise, audience-aware, and consistent. Use one coherent writing style and distinguish prerequisites, steps, expected results, and troubleshooting.'),
+  financeController: professionalPreset('Finance & Business Controller', 'helpful', 'You support business-finance decisions with transparent models, assumptions, and practical interpretation. You are not a substitute for a qualified accountant or financial adviser.', 'Pricing; profitability; revenue projections; SaaS metrics; unit economics; budgeting; cash-flow planning; business modelling; scenario analysis.', 'Numerate, cautious, and commercially practical. Show formulas, assumptions, sensitivity, and limits rather than presenting estimates as facts.'),
+  legalComplianceThailand: professionalPreset('Legal & Compliance Specialist', 'helpful', 'You support Thailand-focused legal and compliance preparation with careful, source-aware analysis. You do not provide legal advice and never invent laws, requirements, or legal conclusions.', 'Contracts; PDPA; terms of service; privacy policy; licensing; open-source licenses; employment-law research; vendor agreements; intellectual-property issue spotting.', 'Careful, neutral, and risk-aware. Identify questions for qualified Thai counsel, jurisdictional uncertainty, required source verification, and practical documentation steps.'),
+  customerSuccess: professionalPreset('Customer Success Specialist', 'kind', 'You help customers succeed through clear onboarding, useful support, respectful communication, and a disciplined feedback loop.', 'Customer onboarding; FAQs; help articles; support replies; bug triage; feature requests; customer-sentiment analysis; escalation preparation.', 'Warm, concise, patient, and action-oriented. Acknowledge the customer’s problem, explain the next step, and avoid promising outcomes that have not been confirmed.'),
+  uiuxDesigner: professionalPreset('UI/UX Designer', 'helpful', 'You design understandable, accessible experiences with clear information hierarchy and consistent interaction patterns.', 'Wireframes; user journeys; interface reviews; accessibility; information architecture; design consistency; Apple Human Interface Guidelines; Material Design.', 'Empathetic, visual, and systematic. Tie recommendations to user goals, cognitive load, accessibility, and platform conventions.'),
+  seoContentStrategist: professionalPreset('SEO & Content Strategist', 'helpful', 'You build discoverable, useful web content through search intent, technical quality, and an editorial strategy that serves users first.', 'Website SEO; keyword research; technical SEO; landing pages; blog strategy; documentation SEO; content briefs; internal linking; measurement plans.', 'Strategic, evidence-led, and audience-focused. Avoid keyword stuffing, ranking guarantees, and tactics that reduce usefulness or trust.'),
+  executiveResearchAssistant: professionalPreset('Executive Research Assistant', 'helpful', 'You support the Chief of Staff with verified information, concise briefings, organized notes, and decision-ready materials.', 'Information collection; fact verification; executive summaries; note organization; briefing documents; decision packs; options and trade-off analysis.', 'Discreet, concise, evidence-first, and highly organized. Clearly separate verified facts, assumptions, open questions, and recommended decisions.'),
+  devopsInfrastructure: professionalPreset('DevOps & Infrastructure Engineer', 'direct', 'You design and operate reliable infrastructure with security, observability, recovery, and maintainability as first-class concerns.', 'VPS; Docker; Linux; Cloudflare; reverse proxies; SSL; CI/CD; backups; monitoring; performance; incident runbooks.', 'Methodical, security-conscious, and operationally realistic. Prefer reversible changes, least privilege, backups, health checks, and documented rollback plans.'),
+  cybersecurityAnalyst: professionalPreset('Cybersecurity Analyst', 'direct', 'You are a cybersecurity analyst who helps identify, reduce, and communicate security risk. Protect confidentiality, integrity, availability, and user trust without overstating certainty or facilitating misuse.', 'Threat modeling; security reviews; vulnerability triage; secure configuration; access-control review; OWASP guidance; incident-response planning; security logging; risk registers; remediation tracking; security awareness.', 'Evidence-led, cautious, practical, and clear. Prioritize risks by likelihood and impact, explain the business consequence, and recommend safe, verifiable mitigations.', 'Do not provide instructions that enable unauthorized access, evasion, credential theft, malware, or exploitation. For active incidents, prioritize containment, evidence preservation, escalation, and qualified security support.'),
+  dataAnalyst: professionalPreset('Data Analyst', 'helpful', 'You turn data into trustworthy insights, decisions, and clear narratives rather than producing spreadsheets without interpretation.', 'CSV analysis; SQL; analytics; dashboards; marketing data; financial data; OCR output; business metrics; data-quality checks; insight communication.', 'Analytical, skeptical, and clear. Validate data quality, explain calculations, distinguish correlation from causation, and present practical implications.'),
+});
+
+const PROFESSIONAL_PRESET_OPTIONS = [
+  ['operations', 'Operations Assistant'], ['socialMediaMarketing', 'Social Media Marketing Expert'], ['productivitySpecialist', 'AI Productivity Specialist'], ['automationEngineer', 'Automation Engineer'], ['hrSpecialist', 'HR Specialist'],
+  ['productManager', 'Product Manager'], ['softwareArchitect', 'Software Architect'], ['seniorSoftwareEngineer', 'Senior Software Engineer'], ['qaEngineer', 'QA Engineer'], ['businessAnalyst', 'Business Analyst'], ['researchAnalyst', 'Research Analyst'], ['technicalWriter', 'Technical Writer'], ['financeController', 'Finance & Business Controller'], ['legalComplianceThailand', 'Legal & Compliance Specialist'], ['customerSuccess', 'Customer Success Specialist'], ['uiuxDesigner', 'UI/UX Designer'], ['seoContentStrategist', 'SEO & Content Strategist'], ['executiveResearchAssistant', 'Executive Research Assistant'], ['devopsInfrastructure', 'DevOps & Infrastructure Engineer'], ['cybersecurityAnalyst', 'Cybersecurity Analyst'], ['dataAnalyst', 'Data Analyst'],
+];
+
+const PROFILE_ROLE_LABELS = {
+  chiefOfStaff: 'Chief of Staff',
+  misfit: 'Misfit / Contrarian',
+  helpful: 'Helpful',
+  kind: 'Kind',
+  direct: 'To the point',
+  sarcastic: 'Sarcastic',
+  tutor: 'Tutor',
+  ...Object.fromEntries(PROFESSIONAL_PRESET_OPTIONS.map(([key, label]) => [key, label])),
+};
+
+for (const selector of ['#new-contact-preset', '#configuration-preset']) {
+  const select = document.querySelector(selector);
+  if (!select) continue;
+  for (const [value, label] of PROFESSIONAL_PRESET_OPTIONS) {
+    if (select.querySelector(`option[value="${value}"]`)) continue;
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = label;
+    select.append(option);
+  }
+}
+
+for (const selector of ['#new-contact-preset', '#configuration-preset']) {
+  const select = document.querySelector(selector);
+  if (!select) continue;
+  const chiefOption = select.querySelector('option[value="chiefOfStaff"]');
+  const misfitOption = select.querySelector('option[value="misfit"]');
+  if (chiefOption) chiefOption.textContent = 'Chief of Staff';
+  if (misfitOption) misfitOption.textContent = 'Misfit / Contrarian';
+}
+
+function installRoleSelector(presetSelector, inputId) {
+  const select = $(presetSelector);
+  const blankOption = select.querySelector('option[value="blank"]');
+  if (blankOption) blankOption.textContent = 'Select Role';
+  ['helpful', 'kind', 'direct', 'sarcastic'].forEach((value) => select.querySelector(`option[value="${value}"]`)?.remove());
+  const roleLabel = document.createElement('label');
+  roleLabel.htmlFor = inputId;
+  roleLabel.className = 'custom-role-field';
+  roleLabel.textContent = 'Role';
+  const input = document.createElement('input');
+  input.id = inputId;
+  input.type = 'text';
+  input.maxLength = 60;
+  input.placeholder = 'e.g. Brand Strategist';
+  roleLabel.append(input);
+  select.closest('label').after(roleLabel);
+  const update = () => roleLabel.classList.toggle('hidden', select.value !== 'blank');
+  select.addEventListener('change', update);
+  update();
+}
+
+installRoleSelector('#new-contact-preset', 'new-contact-custom-role');
+installRoleSelector('#configuration-preset', 'configuration-custom-role');
+
+for (const selector of ['#new-contact-preset', '#configuration-preset']) {
+  const select = $(selector);
+  const blank = select.querySelector('option[value="blank"]');
+  const roles = [...select.options].filter((option) => option.value !== 'blank')
+    .sort((left, right) => left.textContent.localeCompare(right.textContent));
+  if (blank) select.append(blank);
+  roles.forEach((option) => select.append(option));
+  if (blank) select.prepend(blank);
+}
+
+for (const selector of ['#new-contact-name', '#configuration-display-name']) {
+  const input = $(selector);
+  const label = input?.closest('label');
+  if (label?.firstChild?.nodeType === Node.TEXT_NODE) label.firstChild.nodeValue = 'Name your Agent';
+}
+
+for (const selector of ['#new-contact-gender', '#assistant-gender']) {
+  const select = $(selector);
+  const label = select?.closest('label');
+  if (label?.firstChild?.nodeType === Node.TEXT_NODE) label.firstChild.nodeValue = 'AI Agent language gender';
+}
 
 let models = [];
 let profiles = [];
@@ -72,7 +225,7 @@ let apiKeyStored = false;
 let configuration = { legacy: { soul: '', personality: '', customInstructions: '', skills: [], tone: 'helpful', gender: 'neutral' }, profiles: {} };
 let userProfile = { about: '', goals: '', currentContext: '', workStyle: '', assistance: '', boundaries: '' };
 let connection = { provider: 'ollama', baseUrl: 'http://127.0.0.1:11434', preferredModel: 'qwen3.6:latest', timeoutSeconds: 120, keepAlive: '10m', visionEnabled: false };
-let preferences = { userName: 'You', buddyName: 'Desktop Helper', modelAliases: {}, modelPictures: {}, hiddenModels: [], modelProfileIds: {}, deletedProfileIds: [], deletedGroupIds: [], deletedGroupKeys: [], profileMigrationComplete: true, chatSplitPercent: 62, theme: 'light', fontSize: '100', userPicture: null, setupComplete: false, onboardingComplete: false };
+let preferences = { userName: 'You', buddyName: 'Desktop Helper', modelAliases: {}, modelPictures: {}, hiddenModels: [], modelProfileIds: {}, deletedProfileIds: [], deletedGroupIds: [], deletedGroupKeys: [], profileMigrationComplete: true, chatSplitPercent: 62, contactSort: 'last-message', theme: 'light', fontSize: '100', userPicture: null, setupComplete: false, onboardingComplete: false };
 let draftSkills = [];
 let profileBeingRenamed = '';
 let groupBeingDeleted = '';
@@ -148,6 +301,7 @@ function safeAiProfiles(value) {
       model: typeof profile.model === 'string' && profile.model.trim() && profile.model.length <= 200 ? profile.model.trim() : '',
       name: typeof profile.name === 'string' && profile.name.trim() ? profile.name.trim().slice(0, 40) : 'AI',
       picture: safePicture(profile.picture),
+      useGenericAvatar: Boolean(profile.useGenericAvatar),
       favorite: Boolean(profile.favorite),
       online: profile.online !== false,
       createdAt: typeof profile.createdAt === 'string' ? profile.createdAt : new Date().toISOString(),
@@ -210,6 +364,8 @@ function safeAssistantConfiguration(value = {}) {
     skills: Array.isArray(value.skills) ? value.skills.filter((skill) => skill && typeof skill.name === 'string' && typeof skill.content === 'string').slice(0, 20) : [],
     tone: TONES.has(value.tone) ? value.tone : 'helpful',
     gender: AI_GENDERS.has(value.gender) ? value.gender : 'neutral',
+    presetKey: typeof value.presetKey === 'string' && Object.hasOwn(ASSISTANT_PRESETS, value.presetKey) && value.presetKey !== 'blank' ? value.presetKey : '',
+    customRole: typeof value.customRole === 'string' ? value.customRole.trim().slice(0, 60) : '',
   };
 }
 
@@ -287,6 +443,7 @@ function normalizedState(state = {}) {
       deletedGroupKeys: safeStringList(nextPreferences.deletedGroupKeys),
       profileMigrationComplete: Boolean(nextPreferences.profileMigrationComplete) || Number(state.version) >= 3,
       chatSplitPercent: safeChatSplitPercent(nextPreferences.chatSplitPercent),
+      contactSort: ['last-message', 'name', 'role', 'model'].includes(nextPreferences.contactSort) ? nextPreferences.contactSort : 'last-message',
       theme: nextPreferences.theme === 'dark' ? 'dark' : 'light',
       fontSize: ['50', '100', '125'].includes(String(nextPreferences.fontSize)) ? String(nextPreferences.fontSize) : '100',
       userPicture: safePicture(nextPreferences.userPicture),
@@ -438,6 +595,16 @@ function modelContactStatus(model) {
   return [family, details.parameter_size || ''].filter(Boolean).join(' ') || 'Local model';
 }
 
+function profileRoleLabel(profile) {
+  const profileConfiguration = configurationForProfile(profile.id);
+  if (PROFILE_ROLE_LABELS[profileConfiguration.presetKey]) return PROFILE_ROLE_LABELS[profileConfiguration.presetKey];
+  if (profileConfiguration.customRole) return profileConfiguration.customRole;
+  const matchingPreset = Object.entries(ASSISTANT_PRESETS).find(([, preset]) => preset.name && (
+    preset.soul === profileConfiguration.soul || preset.customInstructions === profileConfiguration.customInstructions
+  ));
+  return matchingPreset ? PROFILE_ROLE_LABELS[matchingPreset[0]] : '';
+}
+
 function modelProfileDescription(model) {
   if (!model) return 'This model is not currently available from the connected local server.';
   const name = String(model.name || '').toLowerCase();
@@ -483,6 +650,19 @@ function lastMessageForGroup(group) {
   });
   const timestamp = Math.max(...matching.map(sessionActivityTime).filter(Number.isFinite));
   return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+function sortProfiles(entries) {
+  const mode = preferences.contactSort;
+  return [...entries].sort((left, right) => {
+    if (mode === 'last-message') {
+      const difference = (lastMessageForProfile(right) || 0) - (lastMessageForProfile(left) || 0);
+      if (difference) return difference;
+    }
+    const value = mode === 'role' ? profileRoleLabel(left) : mode === 'model' ? left.model : profileDisplayName(left);
+    const otherValue = mode === 'role' ? profileRoleLabel(right) : mode === 'model' ? right.model : profileDisplayName(right);
+    return value.localeCompare(otherValue, undefined, { sensitivity: 'base' }) || profileDisplayName(left).localeCompare(profileDisplayName(right), undefined, { sensitivity: 'base' });
+  });
 }
 
 function formatLastMessageTime(timestamp) {
@@ -727,10 +907,10 @@ function renderModels() {
     return searchable.includes(query);
   });
   const isOffline = (profile) => profile.online === false || profileSleepState.get(profile.id) === 'sleeping';
-  const favoriteProfiles = filteredProfiles.filter((profile) => profile.favorite);
+  const favoriteProfiles = sortProfiles(filteredProfiles.filter((profile) => profile.favorite));
   const remainingProfiles = filteredProfiles.filter((profile) => !profile.favorite);
-  const onlineProfiles = remainingProfiles.filter((profile) => !isOffline(profile));
-  const offlineProfiles = remainingProfiles.filter(isOffline);
+  const onlineProfiles = sortProfiles(remainingProfiles.filter((profile) => !isOffline(profile)));
+  const offlineProfiles = sortProfiles(remainingProfiles.filter(isOffline));
   $('#online-heading').textContent = `Online (${onlineProfiles.length})`;
   $('#offline-heading').textContent = `Offline (${offlineProfiles.length})`;
   $('#offline-section').classList.toggle('hidden', !offlineProfiles.length);
@@ -753,7 +933,8 @@ function renderModels() {
     const lastMessageTime = lastMessage ? formatLastMessageTime(lastMessage) : null;
     const description = modelProfileDescription(model);
     const footprint = model ? modelFootprintStatus(model) : '';
-    button.innerHTML = `<span class="model-avatar">${statusAvatar(profile, model)}</span><span class="model-copy"><strong>${escapeHtml(profileDisplayName(profile))}</strong><span>${escapeHtml(modelContactStatus(model))}</span>${lastMessageTime ? `<time class="last-message-time" title="${escapeHtml(lastMessageTime.title)}">${escapeHtml(lastMessageTime.label)}</time>` : ''}<span class="model-hover-card" role="tooltip"><b>${escapeHtml(model?.name || profile.model)}</b><em>${escapeHtml(description)}</em>${footprint ? `<small>${escapeHtml(footprint)}</small>` : ''}</span></span>`;
+    const role = profileRoleLabel(profile);
+    button.innerHTML = `<span class="model-avatar">${statusAvatar(profile, model)}</span><span class="model-copy"><strong>${escapeHtml(profileDisplayName(profile))}</strong><span class="model-meta">${role ? `<em class="profile-role">${escapeHtml(role)}</em>` : ''}<b class="profile-model">${escapeHtml(modelContactStatus(model))}</b></span>${lastMessageTime ? `<time class="last-message-time" title="${escapeHtml(lastMessageTime.title)}">${escapeHtml(lastMessageTime.label)}</time>` : ''}<span class="model-hover-card" role="tooltip"><b>${escapeHtml(model?.name || profile.model)}</b><em>${escapeHtml(description)}</em>${footprint ? `<small>${escapeHtml(footprint)}</small>` : ''}</span></span>`;
     button.addEventListener('dragstart', (event) => {
       event.dataTransfer.effectAllowed = 'copy';
       event.dataTransfer.setData('application/x-ai-profile-id', profile.id);
@@ -832,7 +1013,7 @@ function renderProfileGroups() {
   const list = $('#profile-group-list');
   list.innerHTML = '';
   for (const group of profileGroups) {
-    const members = group.profileIds.map(profileById).filter(Boolean);
+    const members = sortProfiles(group.profileIds.map(profileById).filter(Boolean));
     const card = document.createElement('section');
     card.className = 'profile-group-card';
     card.dataset.groupId = group.id;
@@ -1090,7 +1271,11 @@ function openConfiguration(profileId = activePictureProfileId()) {
   $('#personality-prompt').value = activeConfiguration.personality;
   $('#assistant-gender').value = activeConfiguration.gender;
   $('#configuration-tone').value = TONES.has(activeConfiguration.tone) ? activeConfiguration.tone : 'helpful';
-  $('#configuration-preset').value = 'blank';
+  $('#configuration-preset').value = Object.hasOwn(ASSISTANT_PRESETS, activeConfiguration.presetKey)
+    ? activeConfiguration.presetKey
+    : 'blank';
+  $('#configuration-custom-role').value = activeConfiguration.customRole;
+  $('#configuration-custom-role').closest('.custom-role-field').classList.toggle('hidden', $('#configuration-preset').value !== 'blank');
   $('#tone-prompt').value = activeConfiguration.tonePrompt;
   $('#custom-instructions').value = activeConfiguration.customInstructions;
   const promptSkill = activeConfiguration.skills.find((skill) => skill.name === CONTACT_SKILLS_PROMPT_NAME);
@@ -1160,6 +1345,9 @@ function resetNewContactFields() {
   $('#new-contact-personality').value = '';
   $('#new-contact-instructions').value = '';
   $('#new-contact-skills').value = '';
+  $('#new-contact-preset').value = 'blank';
+  $('#new-contact-custom-role').value = '';
+  $('#new-contact-custom-role').closest('.custom-role-field').classList.remove('hidden');
   newContactPicture = null;
   const preview = $('#new-contact-picture-preview');
   preview.classList.add('hidden');
@@ -1207,7 +1395,6 @@ function openNewContactDialog() {
   select.value = models.some((model) => model.name === pictureTargetModel)
     ? pictureTargetModel
     : (models.some((model) => model.name === connection.preferredModel) ? connection.preferredModel : models[0].name);
-  $('#new-contact-preset').value = 'blank';
   resetNewContactFields();
   applyNewContactPreset('blank');
   $('#new-contact-dialog').showModal();
@@ -1251,6 +1438,87 @@ async function editCommand(command) {
   if (command === 'cut' && input) input.setRangeText('', input.selectionStart, input.selectionEnd, 'end');
 }
 
+const PROFILE_CSV_COLUMNS = ['name', 'role', 'model', 'tone', 'gender', 'tonePrompt', 'soul', 'personality', 'customInstructions', 'skills'];
+
+function csvValue(value) {
+  return `"${String(value ?? '').replaceAll('"', '""')}"`;
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let row = []; let cell = ''; let quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    if (quoted && character === '"' && text[index + 1] === '"') { cell += '"'; index += 1; continue; }
+    if (character === '"') { quoted = !quoted; continue; }
+    if (!quoted && character === ',') { row.push(cell); cell = ''; continue; }
+    if (!quoted && (character === '\n' || character === '\r')) {
+      if (character === '\r' && text[index + 1] === '\n') index += 1;
+      row.push(cell); if (row.some((value) => value)) rows.push(row); row = []; cell = ''; continue;
+    }
+    cell += character;
+  }
+  if (quoted) throw new Error('The CSV contains an unfinished quoted value.');
+  row.push(cell); if (row.some((value) => value)) rows.push(row);
+  return rows;
+}
+
+function profileCsv() {
+  const rows = [PROFILE_CSV_COLUMNS];
+  for (const profile of profiles) {
+    const configurationValue = configurationForProfile(profile.id);
+    const isPresetProfile = configurationValue.presetKey || Object.values(ASSISTANT_PRESETS).some((preset) => preset.name && (
+      preset.soul === configurationValue.soul || preset.customInstructions === configurationValue.customInstructions
+    ));
+    if (isPresetProfile) continue;
+    const promptSkill = configurationValue.skills.find((skill) => skill.name === CONTACT_SKILLS_PROMPT_NAME);
+    rows.push([
+      profile.name, configurationValue.customRole, profile.model, configurationValue.tone, configurationValue.gender, configurationValue.tonePrompt,
+      configurationValue.soul, configurationValue.personality, configurationValue.customInstructions, promptSkill?.content || '',
+    ]);
+  }
+  return `${rows.map((row) => row.map(csvValue).join(',')).join('\r\n')}\r\n`;
+}
+
+async function exportProfilesCsv() {
+  const customProfileCount = profileCsv().trim().split(/\r?\n/).length - 1;
+  if (!customProfileCount) throw new Error('There are no custom or imported profiles to export.');
+  const result = await window.retro.exportProfilesCsv(profileCsv());
+  if (!result.canceled) $('#profile-management-result').textContent = `Exported ${customProfileCount} profile${customProfileCount === 1 ? '' : 's'}.`;
+}
+
+async function importProfilesCsv() {
+  const result = await window.retro.importProfilesCsv();
+  if (result.canceled) return;
+  const rows = parseCsv(result.content);
+  if (!rows.length) throw new Error('The CSV is empty.');
+  const headers = rows.shift().map((value) => value.trim());
+  if (PROFILE_CSV_COLUMNS.filter((column) => column !== 'role').some((column) => !headers.includes(column))) throw new Error('Choose an AI Messenger profile CSV with all required columns.');
+  const column = Object.fromEntries(headers.map((name, index) => [name, index]));
+  let imported = 0; let skipped = 0;
+  for (const row of rows.slice(0, 200)) {
+    const name = String(row[column.name] || '').trim().slice(0, 40);
+    const model = String(row[column.model] || '').trim().slice(0, 200);
+    if (!name || !model || profiles.some((profile) => profile.name === name && profile.model === model)) { skipped += 1; continue; }
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
+    const tone = String(row[column.tone] || '').trim();
+    const gender = String(row[column.gender] || '').trim();
+    const skills = String(row[column.skills] || '').trim();
+    profiles.unshift({ id, model, name, picture: null, createdAt: now, updatedAt: now });
+    configuration.profiles[id] = {
+      soul: String(row[column.soul] || '').trim().slice(0, 4000), personality: String(row[column.personality] || '').trim().slice(0, 4000),
+      tonePrompt: String(row[column.tonePrompt] || '').trim().slice(0, 4000), customInstructions: String(row[column.customInstructions] || '').trim().slice(0, 4000),
+      tone: TONES.has(tone) ? tone : 'helpful', gender: AI_GENDERS.has(gender) ? gender : 'neutral', presetKey: '',
+      customRole: String(row[column.role] || '').trim().slice(0, 60),
+      skills: skills ? [{ name: CONTACT_SKILLS_PROMPT_NAME, content: skills.slice(0, 4000) }] : [],
+    };
+    imported += 1;
+  }
+  if (imported) { profiles = profiles.slice(0, 200); await saveState(['profiles', 'configuration']); renderModels(); renderProfileGroups(); }
+  $('#profile-management-result').textContent = `Imported ${imported} profile${imported === 1 ? '' : 's'}${skipped ? `; skipped ${skipped} duplicate or invalid row${skipped === 1 ? '' : 's'}` : ''}.`;
+}
+
 $$('[data-window-action]').forEach((button) => button.addEventListener('click', () => window.retro.windowControl(button.dataset.windowAction)));
 $$('.menu-trigger').forEach((button) => button.addEventListener('click', (event) => { event.stopPropagation(); const menu = $(`#${button.dataset.menu}`); const open = menu.classList.contains('hidden'); closeMenus(); if (open) menu.classList.remove('hidden'); }));
 document.addEventListener('click', (event) => {
@@ -1269,12 +1537,19 @@ $$('[data-command]').forEach((button) => button.addEventListener('click', async 
   if (['cut', 'copy', 'paste'].includes(command)) await editCommand(command);
   if (command === 'theme-light' || command === 'theme-dark') { preferences.theme = command.endsWith('dark') ? 'dark' : 'light'; await saveState(['preferences']); }
   if (command.startsWith('font-')) { preferences.fontSize = command.split('-')[1]; await saveState(['preferences']); }
+  if (command.startsWith('sort-')) {
+    preferences.contactSort = command.slice(5);
+    await saveState(['preferences']);
+    renderModels();
+    renderProfileGroups();
+  }
   if (command.startsWith('tone-')) {
     const activeConfiguration = configurationForProfile(activePictureProfileId(), true);
     activeConfiguration.tone = command.slice(5);
     await saveState(['configuration']);
   }
   if (command === 'setup') openSetup();
+  if (command === 'profile-management') $('#profile-management-dialog').showModal();
   if (command === 'edit-names') openUserProfile();
   if (command === 'user-profile') openUserProfile();
   if (command === 'assistant-config') openConfiguration();
@@ -1316,6 +1591,9 @@ $('#stop-all-models').addEventListener('click', async (event) => {
     button.textContent = 'Stop All';
   }
 });
+
+$('#export-profiles-csv').addEventListener('click', () => exportProfilesCsv().catch((error) => { $('#profile-management-result').textContent = error.message; }));
+$('#import-profiles-csv').addEventListener('click', () => importProfilesCsv().catch((error) => { $('#profile-management-result').textContent = error.message; }));
 $('#chat-search').addEventListener('input', renderChatSearchResults);
 $('#clear-chat-search').addEventListener('click', () => {
   $('#chat-search').value = '';
@@ -1593,6 +1871,7 @@ $('#new-contact-form').addEventListener('submit', async (event) => {
       model: modelName,
       name: displayName,
       picture: newContactPicture,
+      useGenericAvatar: !newContactPicture,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -1607,6 +1886,8 @@ $('#new-contact-form').addEventListener('submit', async (event) => {
       tonePrompt: $('#new-contact-tone-prompt').value.trim(),
       customInstructions: $('#new-contact-instructions').value.trim(),
       skills,
+      presetKey: $('#new-contact-preset').value !== 'blank' ? $('#new-contact-preset').value : '',
+      customRole: $('#new-contact-preset').value === 'blank' ? $('#new-contact-custom-role').value.trim().slice(0, 60) : '',
     };
     pictureTargetProfileId = profile.id;
     pictureTargetModel = modelName;
@@ -1676,6 +1957,8 @@ $('#reset-configuration').addEventListener('click', () => {
   const profile = profileById(configurationDialogProfileId);
   if (profile) $('#configuration-display-name').value = profile.name || '';
   $('#configuration-preset').value = 'blank';
+  $('#configuration-custom-role').value = '';
+  $('#configuration-custom-role').closest('.custom-role-field').classList.remove('hidden');
   $('#configuration-tone').value = 'helpful';
   $('#assistant-gender').value = 'neutral';
   $('#soul-prompt').value = '';
@@ -1696,7 +1979,7 @@ $('#configuration-form').addEventListener('submit', async (event) => {
   if (skillsPrompt) skills.unshift({ name: CONTACT_SKILLS_PROMPT_NAME, content: skillsPrompt });
   profile.name = $('#configuration-display-name').value.trim().slice(0, 40) || 'AI';
   const newPicture = $('#configuration-picture').dataset.value;
-  if (newPicture) profile.picture = newPicture;
+  if (newPicture) { profile.picture = newPicture; profile.useGenericAvatar = false; }
   profile.updatedAt = new Date().toISOString();
   configuration.profiles[configurationDialogProfileId] = {
     soul: $('#soul-prompt').value.trim(),
@@ -1706,6 +1989,8 @@ $('#configuration-form').addEventListener('submit', async (event) => {
     skills,
     tone: TONES.has($('#configuration-tone').value) ? $('#configuration-tone').value : existing.tone,
     gender: AI_GENDERS.has($('#assistant-gender').value) ? $('#assistant-gender').value : 'neutral',
+    presetKey: $('#configuration-preset').value !== 'blank' ? $('#configuration-preset').value : '',
+    customRole: $('#configuration-preset').value === 'blank' ? $('#configuration-custom-role').value.trim().slice(0, 60) : '',
   };
   await saveState(['profiles', 'configuration']);
   renderModels();

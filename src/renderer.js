@@ -16,6 +16,7 @@ const els = {
   sendFileButton: document.querySelector('#send-file-button'),
   sendFileInput: document.querySelector('#send-file-input'),
   clearChatButton: document.querySelector('#clear-chat-button'),
+  startNewChatButton: document.querySelector('#start-new-chat-button'),
   thinkingMode: document.querySelector('#thinking-mode'),
   capture: document.querySelector('#capture-button'),
   attachment: document.querySelector('#attachment'),
@@ -81,6 +82,11 @@ const els = {
   historyList: document.querySelector('#history-list'),
   closeHistoryDialog: document.querySelector('#close-history-dialog'),
   cancelHistory: document.querySelector('#cancel-history'),
+  historyViewerDialog: document.querySelector('#history-viewer-dialog'),
+  historyViewerTitle: document.querySelector('#history-viewer-title'),
+  historyViewerContent: document.querySelector('#history-viewer-content'),
+  closeHistoryViewer: document.querySelector('#close-history-viewer'),
+  cancelHistoryViewer: document.querySelector('#cancel-history-viewer'),
   configurationDialog: document.querySelector('#configuration-dialog'),
   configurationForm: document.querySelector('#configuration-form'),
   configurationModelLabel: document.querySelector('#configuration-model-label'),
@@ -164,6 +170,7 @@ let generationStopped = false;
 let activeGenerationModel = '';
 let activeStreamRequestId = '';
 let activeStreamArticle = null;
+let activeStreamRawContent = '';
 let appOnline = true;
 let mentionMatches = [];
 let activeMentionIndex = 0;
@@ -319,6 +326,7 @@ function safeAiProfiles(value) {
       model: typeof profile.model === 'string' && profile.model.trim() && profile.model.length <= 200 ? profile.model.trim() : '',
       name: safeName(profile.name, 'AI'),
       picture: safePicture(profile.picture),
+      useGenericAvatar: Boolean(profile.useGenericAvatar),
       online: profile.online !== false,
       createdAt: typeof profile.createdAt === 'string' ? profile.createdAt : new Date().toISOString(),
       updatedAt: typeof profile.updatedAt === 'string' ? profile.updatedAt : new Date().toISOString(),
@@ -377,6 +385,8 @@ function safeAssistantConfiguration(value = {}) {
     skills: Array.isArray(value.skills) ? value.skills.filter((skill) => skill && typeof skill.name === 'string' && typeof skill.content === 'string').slice(0, 20) : [],
     tone: value.tone in TONE_PROMPTS ? value.tone : 'helpful',
     gender: ['neutral', 'feminine', 'masculine'].includes(value.gender) ? value.gender : 'neutral',
+    presetKey: typeof value.presetKey === 'string' ? value.presetKey.slice(0, 80) : '',
+    customRole: typeof value.customRole === 'string' ? value.customRole.trim().slice(0, 60) : '',
   };
 }
 
@@ -661,7 +671,26 @@ function cleanHistoricalAssistantContent(content, modelName, profileId = '') {
   for (const greeting of [`Hi ${userName}! I’m ${label}.`, `Hi ${userName}! I'm ${label}.`]) {
     if (cleaned.startsWith(greeting)) cleaned = cleaned.replace(greeting, `Hi ${userName}! I’m ready to help.`);
   }
-  return cleaned;
+  return cleanAssistantFormatting(cleaned);
+}
+
+function cleanAssistantFormatting(value) {
+  return String(value || '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/^```[^\n]*\n?/gm, '')
+    .replace(/```/g, '')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^\s{0,3}#{1,6}\s+/gm, '')
+    .replace(/^\s{0,3}>\s?/gm, '')
+    .replace(/^\s*[-*+]\s+/gm, '• ')
+    .replace(/^(?:---|___|\*\*\*)\s*$/gm, '')
+    .replace(/\*\*|__|~~/g, '')
+    .replace(/(^|[^\w])\*([^*\n]+)\*(?=[^\w]|$)/g, '$1$2')
+    .replace(/(^|[^\w_])_([^_\n]+)_(?=[^\w_]|$)/g, '$1$2')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function renderConversation() {
@@ -746,16 +775,34 @@ function restoreAttachment(savedAttachment) {
 let contextWarningDismissedSessionId = '';
 async function archiveForFreshContextIfNeeded(pendingContent) {
   const { capacity, estimated } = currentContextEstimate(pendingContent, attachment);
-  if (estimated < Math.floor(capacity * 0.72) || contextWarningDismissedSessionId === activeSessionId) return;
-  const startFresh = window.confirm(`This chat is nearing its context capacity (${Math.round((estimated / capacity) * 100)}% estimated). Starting a fresh chat will archive this conversation in Chat History and can improve response speed. Start a fresh chat now?`);
+  const utilization = estimated / capacity;
+  if (utilization >= 1) {
+    showStartNewChatAction();
+    return { capacity, estimated, full: true };
+  }
+  if (utilization < 0.72 || contextWarningDismissedSessionId === activeSessionId) return { capacity, estimated, full: false };
+  const startFresh = window.confirm(`This chat is nearing its context capacity (${Math.round(utilization * 100)}% estimated). Would you like to start a new chat now? The current conversation will remain available in Chat History.`);
   if (!startFresh) {
     contextWarningDismissedSessionId = activeSessionId;
-    return;
+    return { capacity, estimated, full: false };
   }
   const savedAttachment = attachment ? { ...attachment } : null;
   await newChat();
   restoreAttachment(savedAttachment);
   contextWarningDismissedSessionId = '';
+  return { capacity, estimated, full: false };
+}
+
+function showStartNewChatAction() {
+  els.startNewChatButton.classList.remove('hidden');
+}
+
+function hideStartNewChatAction() {
+  els.startNewChatButton.classList.add('hidden');
+}
+
+function isContextLimitError(error) {
+  return /context\s*(?:window|length).*(?:full|exceed|limit)|(?:maximum|token)\s+context|prompt\s+(?:is\s+)?too\s+long|num_ctx/i.test(String(error?.message || error || ''));
 }
 
 function sessionTitle() {
@@ -824,6 +871,7 @@ async function newChat() {
   await archiveCurrentThread();
   activeSessionId = crypto.randomUUID();
   contextWarningDismissedSessionId = '';
+  hideStartNewChatAction();
   history = [];
   clearAttachment();
   renderEmptyChat();
@@ -863,19 +911,31 @@ function renderHistoryList(allChats = false) {
     const audience = session.groupModels?.length
       ? (session.groupName || 'AI Group')
       : assistantDisplayName(session.model || '', session.profileId || '');
-    entry.innerHTML = `<div><strong>${escapeHtml(session.title || 'Untitled chat')}</strong><span>${escapeHtml(audience)} · ${escapeHtml(date)} · ${session.messages.length} messages${session.isArchived ? ' · Archived' : ''}${session.model ? ` · ${escapeHtml(session.model)}` : ''}</span></div><button type="button">Open</button>`;
+    entry.innerHTML = `<div><strong>${escapeHtml(session.title || 'Untitled chat')}</strong><span>${escapeHtml(audience)} · ${escapeHtml(date)} · ${session.messages.length} messages${session.isArchived ? ' · Archived' : ''}${session.model ? ` · ${escapeHtml(session.model)}` : ''}</span></div><button type="button">View</button>`;
     entry.querySelector('button').addEventListener('click', () => {
-      const accepted = window.confirm('Warning: Loading historical chat may add outdated context to this thread. Continue loading this cached conversation?');
-      if (!accepted) return;
-      activeSessionId = session.sourceSessionId || session.id;
-      history = session.messages.map(({ role, content, displayContent, model, profileId, addressedModels, timestamp }) => ({ role, content, displayContent: displayContent || '', model: model || '', profileId: profileId || '', addressedModels: Array.isArray(addressedModels) ? addressedModels : [], timestamp: typeof timestamp === 'string' ? timestamp : '' }));
-      renderConversation();
+      openHistoryViewer(session);
       els.historyDialog.close();
-      if (els.historyDialogTitle) els.historyDialogTitle.textContent = 'Chat History';
-      setStatus('online', 'Historical chat loaded — context may be outdated');
     });
     els.historyList.append(entry);
   }
+}
+
+function openHistoryViewer(session) {
+  const heading = session.title || 'Untitled chat';
+  const transcript = (session.messages || []).map((message) => {
+    const timestamp = message.timestamp ? formatMessageTimestamp(message.timestamp) : '';
+    const author = message.role === 'user'
+      ? userName
+      : assistantReferenceName(message.model || session.model || '', message.profileId || session.profileId || '');
+    const rawContent = message.displayContent || message.content || '(Empty message)';
+    const content = message.role === 'assistant'
+      ? cleanHistoricalAssistantContent(rawContent, message.model || session.model || '', message.profileId || session.profileId || '')
+      : rawContent;
+    return `${timestamp ? `[${timestamp}] ` : ''}${author}: ${content}`;
+  }).join('\n\n');
+  els.historyViewerTitle.textContent = heading;
+  els.historyViewerContent.textContent = transcript || 'No messages were saved in this chat.';
+  els.historyViewerDialog.showModal();
 }
 
 function openHistoryDialog() {
@@ -919,6 +979,57 @@ function restoreLatestConversation() {
   setStatus('online', history.length ? 'Previous conversation restored' : 'New chat restored');
 }
 
+function workspaceThreadAudience(thread) {
+  if (Array.isArray(thread.groupModels) && thread.groupModels.length) return thread.groupName || 'AI Group';
+  const profile = profileForModel(thread.model || '', thread.profileId || '');
+  return profile?.name || thread.model || 'AI chat';
+}
+
+function workspaceMessageExcerpt(message) {
+  const speaker = message.role === 'assistant'
+    ? (assistantReferenceName(message.model || '', message.profileId || '') || 'Assistant')
+    : userName;
+  const text = String(message.displayContent || message.content || '').replace(/\s+/g, ' ').trim();
+  return `${speaker}: ${text.length > 420 ? `${text.slice(0, 417)}…` : text}`;
+}
+
+function chiefWorkspaceSearchContext() {
+  const request = String([...history].reverse().find((message) => message.role === 'user')?.content || '');
+  const requestedSearch = /\b(search|find|look up|check|review|history|thread|chat|conversation|friend|contact|agent|model|previous|prior|remember|decid(?:e|ed|ing))\b/i.test(request);
+  if (!requestedSearch) return '';
+  const keywords = new Set((request.toLocaleLowerCase().match(/[\p{L}\p{N}_-]{4,}/gu) || []).slice(0, 12));
+  const friendMatches = profiles.filter((profile) => {
+    const text = `${profile.name} ${profile.model}`.toLocaleLowerCase();
+    return /\b(friend|contact|agent|model)\b/i.test(request) || [...keywords].some((word) => text.includes(word));
+  }).slice(0, 30).map((profile) => `- ${profile.name} — ${profile.model} (${profile.online === false ? 'offline' : 'online'})`);
+  const threadEntries = [
+    ...sessions.map((thread) => ({ ...thread, archived: false })),
+    ...chatArchives.map((thread) => ({ ...thread, archived: true })),
+  ].filter((thread) => thread.id !== activeSessionId && thread.sourceSessionId !== activeSessionId);
+  const indexed = threadEntries.map((thread) => {
+    const messageText = (thread.messages || []).map((message) => String(message.content || '')).join(' ').toLocaleLowerCase();
+    const matches = [...keywords].filter((word) => messageText.includes(word)).length;
+    const updated = Date.parse(thread.archivedAt || thread.updatedAt || '') || 0;
+    return { thread, matches, updated };
+  }).sort((left, right) => right.matches - left.matches || right.updated - left.updated);
+  const excerpts = [];
+  let used = 0;
+  for (const { thread, matches } of indexed.filter((entry) => entry.matches || /\b(history|thread|chat|conversation|previous|prior|remember)\b/i.test(request)).slice(0, 10)) {
+    const transcript = (thread.messages || []).slice(-6).map(workspaceMessageExcerpt).filter(Boolean).join('\n');
+    if (!transcript) continue;
+    const entry = `[${workspaceThreadAudience(thread)} — ${thread.title || 'Untitled chat'}]\n${transcript}`;
+    if (used + entry.length > 7000) break;
+    excerpts.push(entry);
+    used += entry.length + 2;
+  }
+  if (!friendMatches.length && !excerpts.length) return 'CHIEF OF STAFF READ-ONLY WORKSPACE SEARCH: No matching saved agents or chat records were found for this request.';
+  return [
+    'CHIEF OF STAFF READ-ONLY WORKSPACE SEARCH RESULTS: AI Messenger searched the local friend list and saved chat records for the current request. You may use only these results to answer. You cannot modify profiles, chats, groups, history, settings, files, or model connections. Do not claim you performed any change.',
+    friendMatches.length ? `MATCHING AI AGENTS:\n${friendMatches.join('\n')}` : '',
+    excerpts.length ? `MATCHING CHAT RECORDS:\n${excerpts.join('\n\n')}` : '',
+  ].filter(Boolean).join('\n\n');
+}
+
 function buildSystemPrompt(modelName = selectedModelName(), profileId = '', routingInstruction = '') {
   const profile = profileForModel(modelName, profileId);
   const modelDisplayName = profile?.name || userPreferences.modelAliases?.[modelName] || buddyName;
@@ -935,6 +1046,8 @@ function buildSystemPrompt(modelName = selectedModelName(), profileId = '', rout
   }
   if (modelIsChiefOfStaff) {
     sections.push('CHIEF OF STAFF COORDINATION ROLE: The user is the project manager and will give you the desired outcome. Turn that outcome into a concise delegation plan for the assistants in this group. Identify which specialist should handle each part, address them by their actual @mention handles, and state the sequence and acceptance check. Do not perform a specialist task yourself when a better-suited assistant is available. Keep coordination in this shared group chat and wait for real specialist replies before synthesizing a final answer.');
+    const workspaceSearch = chiefWorkspaceSearchContext();
+    if (workspaceSearch) sections.push(workspaceSearch);
   }
   if (isGroupChat) {
     const participants = requestedGroupModels.map((participant, index) => assistantReferenceName(participant, requestedGroupProfiles[index]?.id || '')).join(', ');
@@ -1009,9 +1122,10 @@ async function loadModels() {
       els.modelSelect.append(option);
       if (isGroupChat) break;
     }
+    const savedProfileModel = isGroupChat ? '' : profileById(requestedProfileId)?.model;
     const preferred = isGroupChat
       ? availableModels.find((model) => model.name === requestedGroupModels[0])
-      : models.find((model) => model.name === requestedWindowModel) || models.find((model) => model.name === llmConnection.preferredModel) || models.find((model) => model.name === 'qwen3.6:latest' && model.capabilities?.includes('vision')) || models.find((model) => model.capabilities?.includes('vision')) || models[0];
+      : models.find((model) => model.name === savedProfileModel) || models.find((model) => model.name === requestedWindowModel) || models.find((model) => model.name === llmConnection.preferredModel) || models.find((model) => model.name === 'qwen3.6:latest' && model.capabilities?.includes('vision')) || models.find((model) => model.capabilities?.includes('vision')) || models[0];
     if (!preferred) throw new Error('No local models found.');
     els.modelSelect.value = preferred.name;
     // A chat opened for a saved AI profile may switch its underlying local
@@ -1274,7 +1388,10 @@ function buddyDisplayName() {
 function assistantDisplayName(modelName, profileId = '') {
   const profile = profileForModel(modelName, profileId);
   const customName = profile?.name || userPreferences.modelAliases?.[modelName] || buddyName;
-  return `${customName} (${formatModelName(modelName)})`;
+  // One-to-one chats already show the active model in the picker. Keep the
+  // compact name there, while group conversations retain model context for
+  // distinguishing similarly named assistants.
+  return isGroupChat ? `${customName} (${formatModelName(modelName)})` : customName;
 }
 
 function assistantReferenceName(modelName, profileId = '') {
@@ -1286,6 +1403,7 @@ function isChiefOfStaff(modelName, profileId = '') {
   const profile = profileForModel(modelName, profileId);
   if (String(profile?.name || '').trim().toLowerCase() === 'chief of staff') return true;
   const configured = profileId ? assistantProfiles.profiles?.[profileId] : null;
+  if (configured?.presetKey === 'chiefOfStaff' || /chief\s+of\s+staff/i.test(configured?.customRole || '')) return true;
   const configurationText = [configured?.soul, configured?.personality, configured?.customInstructions, configured?.skills?.map((skill) => skill.content).join(' ')].join(' ').toLowerCase();
   return configurationText.includes('chief of staff');
 }
@@ -1421,7 +1539,9 @@ function markCurrentChatRead() {
 }
 
 function selectedModelPicture() {
-  return currentProfile()?.picture || userPreferences.modelPictures?.[selectedModelName()] || null;
+  const profile = currentProfile();
+  if (profile?.useGenericAvatar) return null;
+  return profile?.picture || userPreferences.modelPictures?.[selectedModelName()] || null;
 }
 
 function openUserProfileDialog() {
@@ -1522,7 +1642,7 @@ function renderGroupPictures() {
       renderGroupPictures();
     });
     const profile = profileForModel(modelName, profileId);
-    const picture = profile?.picture || userPreferences.modelPictures?.[modelName];
+    const picture = profile?.useGenericAvatar ? null : (profile?.picture || userPreferences.modelPictures?.[modelName]);
     if (picture) {
       const image = document.createElement('img');
       image.src = picture;
@@ -1573,6 +1693,7 @@ function storeProfilePicture(file, type) {
           return;
         }
         profile.picture = dataUrl;
+        profile.useGenericAvatar = false;
         profile.updatedAt = new Date().toISOString();
       } else {
         userPreferences.userPicture = dataUrl;
@@ -1942,6 +2063,7 @@ document.querySelectorAll('[data-picture-action]').forEach((button) => {
         const profile = currentProfile();
         if (profile) {
           profile.picture = null;
+          profile.useGenericAvatar = true;
           profile.updatedAt = new Date().toISOString();
         }
       } else {
@@ -2029,6 +2151,8 @@ els.cancelModelName.addEventListener('click', () => els.modelNameDialog.close())
 
 els.closeHistoryDialog.addEventListener('click', () => els.historyDialog.close());
 els.cancelHistory.addEventListener('click', () => els.historyDialog.close());
+els.closeHistoryViewer.addEventListener('click', () => els.historyViewerDialog.close());
+els.cancelHistoryViewer.addEventListener('click', () => els.historyViewerDialog.close());
 
 els.closeConfigurationDialog.addEventListener('click', () => els.configurationDialog.close());
 els.cancelConfiguration.addEventListener('click', () => els.configurationDialog.close());
@@ -2188,6 +2312,10 @@ els.stop.addEventListener('click', async () => {
   }
 });
 
+els.startNewChatButton.addEventListener('click', () => {
+  newChat().catch((error) => reportBackgroundError('Could not start a new chat', error));
+});
+
 els.composer.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!appOnline) {
@@ -2200,9 +2328,10 @@ els.composer.addEventListener('submit', async (event) => {
   }
   let typedContent = els.prompt.value.trim();
   if ((!typedContent && !attachment) || els.send.disabled) return;
-  await archiveForFreshContextIfNeeded(typedContent);
+  const contextState = await archiveForFreshContextIfNeeded(typedContent);
   typedContent = els.prompt.value.trim();
   const content = typedContent || `Please review the attached ${attachment?.name || 'file'}.`;
+  if (contextState?.full) setStatus('offline', 'Context is full. You can try sending, or select Start New Chat to continue with a clean context.');
   const mentionResolution = resolveGroupMentions(content);
   if (isGroupChat && mentionResolution.unknown.length) {
     const available = groupMentionEntries().map((entry) => `@${entry.handle}`).join(', ');
@@ -2327,27 +2456,35 @@ els.composer.addEventListener('submit', async (event) => {
         const messages = [{ role: 'system', content: buildSystemPrompt(modelName, profileId, routingInstruction) }, ...modelHistory];
         const requestId = crypto.randomUUID();
         activeStreamRequestId = requestId;
+        activeStreamRawContent = '';
         const assistantTimestamp = new Date().toISOString();
         activeStreamArticle = addMessage('assistant', '', null, modelName, [], profileId, true, assistantTimestamp);
         const reply = await window.retro.chat({ requestId, model: modelName, messages, connection: llmConnection, thinkingMode: els.thinkingMode.value });
-        const assistantMessage = { role: 'assistant', content: reply.content, model: isGroupChat ? modelName : '', profileId, timestamp: assistantTimestamp };
+        const cleanedReply = cleanAssistantFormatting(reply.content || '(No text response)');
+        const assistantMessage = { role: 'assistant', content: cleanedReply, model: isGroupChat ? modelName : '', profileId, timestamp: assistantTimestamp };
         history.push(assistantMessage);
         groupStackTopModel = '';
         if (isGroupChat) renderGroupPictures();
         window.retro.reportModelStatus(modelName, 'online').catch(() => {});
-        updateStreamingMessage(activeStreamArticle, reply.content || '(No text response)');
+        updateStreamingMessage(activeStreamArticle, cleanedReply);
         activeStreamRequestId = '';
         activeStreamArticle = null;
+        activeStreamRawContent = '';
         await window.retro.setChatUnread(profileId || modelName, !document.hasFocus()).catch((error) => reportBackgroundError('Could not update unread status', error));
       } catch (error) {
         const failedStreamArticle = activeStreamArticle;
         activeStreamRequestId = '';
         activeStreamArticle = null;
+        activeStreamRawContent = '';
         if (generationStopped) break;
         if (/timeout|timed out|aborted/i.test(error.message || '')) window.retro.reportModelStatus(modelName, 'timeout').catch(() => {});
+        if (isContextLimitError(error)) showStartNewChatAction();
         failures.push(`${assistantDisplayName(modelName, profileId)}: ${error.message}`);
-        if (failedStreamArticle) updateStreamingMessage(failedStreamArticle, `I could not reply because of a local connection error: ${error.message}`);
-        else addMessage('assistant', `I could not reply because of a local connection error: ${error.message}`, null, modelName, [], profileId);
+        const replyError = isContextLimitError(error)
+          ? 'This chat has reached the model context limit. Select Start New Chat to continue; the current transcript remains available in Chat History.'
+          : `I could not reply because of a local connection error: ${error.message}`;
+        if (failedStreamArticle) updateStreamingMessage(failedStreamArticle, replyError);
+        else addMessage('assistant', replyError, null, modelName, [], profileId);
       }
     }
     await persistCurrentSession();
@@ -2554,8 +2691,8 @@ window.retro.onConnectionStatusChanged((state) => {
 });
 window.retro.onChatChunk((chunk) => {
   if (!chunk || chunk.requestId !== activeStreamRequestId || typeof chunk.content !== 'string') return;
-  const current = activeStreamArticle?.querySelector('.bubble')?.textContent || '';
-  updateStreamingMessage(activeStreamArticle, `${current === '▋' ? '' : current}${chunk.content}`);
+  activeStreamRawContent += chunk.content;
+  updateStreamingMessage(activeStreamArticle, cleanAssistantFormatting(activeStreamRawContent));
 });
 window.retro.onStopAllChats(() => {
   if (!activeGenerationModel && els.stop.classList.contains('hidden')) return;

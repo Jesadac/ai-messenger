@@ -13,7 +13,7 @@ Download the current package from the [latest release](https://github.com/Jesada
 3. Extract the package and launch the application. On macOS, move **Retro Messenger Assistant.app** to Applications; on Windows, run `ai-messenger.exe`.
 4. In AI Messenger, open **Tools → Setup local model**, choose automatic detection or enter your local server address, then select **Test Connection** and **Save & Connect**.
 
-See the [User Guide](distribution/USER_GUIDE.md) for the full feature reference.
+See the [User Guide](distribution/USER_GUIDE.md) for the full feature reference and the [Changelog](CHANGELOG.md) for release-by-release updates.
 
 ## Read before installing
 

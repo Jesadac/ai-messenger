@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.0.7 - 2026-07-21
+
 - Added preset roles for Operations Assistant, Social Media Marketing Expert, AI Productivity Specialist, Automation Engineer, and HR Specialist.
 - Added editable Soul, behavior, tone, instruction, and skills content for each new role.
 - Added Product Manager, Software Architect, Senior Software Engineer, QA Engineer, Business Analyst, Research Analyst, Technical Writer, Finance & Business Controller, Legal & Compliance Specialist, Customer Success Specialist, UI/UX Designer, SEO & Content Strategist, Executive Research Assistant, DevOps & Infrastructure Engineer, and Data Analyst presets.
@@ -9,6 +11,9 @@
 - Added the Cybersecurity Analyst role preset for risk assessment, secure configuration, threat modeling, vulnerability triage, and incident-response preparation.
 - Added on-demand read-only workspace search for Chief of Staff profiles: matching friend-list entries and relevant saved-chat excerpts are provided only when the user asks about agents, chats, history, or prior work.
 - Added read-only Chat History transcript popups and optional context-capacity controls, including Start New Chat when the model context is full.
+- Added release guardrails so packaged apps refuse to store personal user data inside release artifacts.
+- Tightened packaging exclusions for local encrypted vault and auto-unlock files.
+- Added Debian and Ubuntu package build automation for Linux variants pending separate testing.
 
 ## v1.0.6
 

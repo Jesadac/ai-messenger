@@ -38,6 +38,20 @@ if (!app.isPackaged) {
   if (developmentProfile) app.setPath('userData', path.resolve(developmentProfile.slice('--development-user-data-dir='.length)));
 }
 
+function assertPackagedUserDataIsolation() {
+  if (!app.isPackaged) return;
+  const userData = path.resolve(app.getPath('userData'));
+  const resourceRoots = [
+    process.resourcesPath,
+    __dirname,
+    process.cwd(),
+  ].filter(Boolean).map((entry) => path.resolve(entry));
+  const insideReleaseArtifact = resourceRoots.some((root) => userData === root || userData.startsWith(`${root}${path.sep}`));
+  if (insideReleaseArtifact) {
+    throw new Error(`Refusing to store personal AI Messenger data inside the release artifact: ${userData}`);
+  }
+}
+
 function rendererUrls() {
   return new Set(['index.html', 'contact.html'].map((filename) => pathToFileURL(path.join(__dirname, filename)).href));
 }
@@ -1102,6 +1116,7 @@ app.on('web-contents-created', (_event, contents) => {
 });
 
 app.whenReady().then(() => {
+  assertPackagedUserDataIsolation();
   session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false));
   if (process.platform === 'darwin') app.dock.setIcon(path.join(__dirname, '..', 'assets', 'ai-messenger-1024.png'));
   createContactWindow();

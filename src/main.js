@@ -250,8 +250,15 @@ function layoutDockedChat() {
   dockedChatView.setBounds({ x: CONTACT_PANE_WIDTH, y: 0, width: Math.max(1, width - CONTACT_PANE_WIDTH), height });
 }
 
+function showContactWindowForDockedChat() {
+  if (!contactWindow || contactWindow.isDestroyed()) return;
+  if (contactWindow.isMinimized()) contactWindow.restore();
+  if (!contactWindow.isVisible()) contactWindow.show();
+}
+
 function expandContactWindow() {
   if (!contactWindow || contactWindow.isDestroyed()) return;
+  showContactWindowForDockedChat();
   if (contactWindow.isMaximized()) contactWindow.unmaximize();
   const current = contactWindow.getBounds();
   const workArea = screen.getDisplayMatching(current).workArea;
@@ -314,6 +321,7 @@ function attachDockedConversation(key, query, model = '') {
   dockedProfileId = query.profileId || '';
   dockedChatKey = key;
   dockedChatQuery = query;
+  showContactWindowForDockedChat();
   layoutDockedChat();
   sendDockState();
   return { docked: true, model, profileId: dockedProfileId, key };

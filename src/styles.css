@@ -195,3 +195,57 @@ dialog button,
 dialog input,
 dialog textarea,
 dialog label { font-size: calc(12px * var(--font-multiplier)) !important; }
+
+/* Windows dark-mode contrast hardening. Keep late so it wins over dialog-specific rules. */
+html[data-theme="dark"] dialog button,
+html[data-theme="dark"] .dialog-actions button,
+html[data-theme="dark"] .file-row button,
+html[data-theme="dark"] .settings-actions button,
+html[data-theme="dark"] .setup-detect-row button,
+html[data-theme="dark"] .about-me-picture-actions button,
+html[data-theme="dark"] .skill-heading button,
+html[data-theme="dark"] .config-file-button,
+html[data-theme="dark"] .history-entry button,
+html[data-theme="dark"] .history-actions button,
+html[data-theme="dark"] .guide-actions button,
+html[data-theme="dark"] .group-participant-row button,
+html[data-theme="dark"] .compose-tools button,
+html[data-theme="dark"] .compose-buttons button,
+html[data-theme="dark"] .group-mentions button,
+html[data-theme="dark"] .emoji-grid button {
+  color: #edf7ff !important;
+  border-color: #6b8294 !important;
+  background: linear-gradient(#43596a, #283a47) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, .16);
+}
+html[data-theme="dark"] dialog button:hover,
+html[data-theme="dark"] .dialog-actions button:hover,
+html[data-theme="dark"] .file-row button:hover,
+html[data-theme="dark"] .settings-actions button:hover,
+html[data-theme="dark"] .setup-detect-row button:hover,
+html[data-theme="dark"] .about-me-picture-actions button:hover,
+html[data-theme="dark"] .skill-heading button:hover,
+html[data-theme="dark"] .config-file-button:hover,
+html[data-theme="dark"] .history-entry button:hover,
+html[data-theme="dark"] .history-actions button:hover,
+html[data-theme="dark"] .guide-actions button:hover,
+html[data-theme="dark"] .compose-tools button:hover,
+html[data-theme="dark"] .compose-buttons button:hover,
+html[data-theme="dark"] .group-mentions button:hover,
+html[data-theme="dark"] .emoji-grid button:hover {
+  color: #ffffff !important;
+  background: linear-gradient(#4d6c80, #315066) !important;
+}
+html[data-theme="dark"] dialog button:disabled,
+html[data-theme="dark"] .dialog-actions button:disabled,
+html[data-theme="dark"] .file-row button:disabled,
+html[data-theme="dark"] .settings-actions button:disabled,
+html[data-theme="dark"] .compose-buttons button:disabled {
+  color: #8fa1af !important;
+  background: #27333d !important;
+}
+html[data-theme="dark"] .mention-autocomplete button.active,
+html[data-theme="dark"] .mention-autocomplete button:hover {
+  color: #fff !important;
+  background: #315066 !important;
+}

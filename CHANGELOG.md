@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v1.0.8 - 2026-07-22
+
+- Fixed Windows dark-mode contrast for dialog buttons and chat/contact controls.
+- Fixed selected and highlighted contacts in dark mode so assistant names and metadata remain readable.
+- Restored the contact window before docked chat switches so changing chats does not leave the host window minimized or hidden.
+
 ## v1.0.7 - 2026-07-21
 
 - Added preset roles for Operations Assistant, Social Media Marketing Expert, AI Productivity Specialist, Automation Engineer, and HR Specialist.

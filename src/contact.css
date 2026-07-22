@@ -175,3 +175,94 @@ html[data-theme="dark"] .model-copy .profile-model { color: #bcd0df; }
 .model-hover-card { display: block; visibility: hidden; opacity: 0; background: #fffde9; transition: opacity .12s ease, visibility 0s linear .12s; }
 .model-contact:hover, .model-contact:focus-within { position: relative; z-index: 30; }
 .model-contact:hover .model-hover-card, .model-contact:focus-visible .model-hover-card { visibility: visible; opacity: 1; transition-delay: 3s, 3s; }
+
+/* Windows dark-mode contrast hardening. Keep late so it wins over compact dialog rules. */
+html[data-theme="dark"] .model-contact:hover,
+html[data-theme="dark"] .model-contact:focus,
+html[data-theme="dark"] .model-contact:focus-within,
+html[data-theme="dark"] .model-contact.selected,
+html[data-theme="dark"] .saved-group:hover,
+html[data-theme="dark"] .saved-group:focus,
+html[data-theme="dark"] .profile-group-member:hover,
+html[data-theme="dark"] .profile-group-member:focus-visible,
+html[data-theme="dark"] .chat-search-result:hover,
+html[data-theme="dark"] .chat-search-result:focus-visible {
+  color: #f7fbff;
+  background: #29465b;
+  outline-color: #6f9ebe;
+}
+html[data-theme="dark"] .model-contact.selected {
+  box-shadow: inset 3px 0 #79c8ff;
+}
+html[data-theme="dark"] .model-contact:hover .model-copy strong,
+html[data-theme="dark"] .model-contact:focus .model-copy strong,
+html[data-theme="dark"] .model-contact:focus-within .model-copy strong,
+html[data-theme="dark"] .model-contact.selected .model-copy strong,
+html[data-theme="dark"] .saved-group:hover .model-copy strong,
+html[data-theme="dark"] .saved-group:focus .model-copy strong {
+  color: #ffffff;
+}
+html[data-theme="dark"] .model-contact:hover .model-copy span,
+html[data-theme="dark"] .model-contact:focus .model-copy span,
+html[data-theme="dark"] .model-contact:focus-within .model-copy span,
+html[data-theme="dark"] .model-contact.selected .model-copy span,
+html[data-theme="dark"] .model-contact:hover .profile-role,
+html[data-theme="dark"] .model-contact:focus .profile-role,
+html[data-theme="dark"] .model-contact:focus-within .profile-role,
+html[data-theme="dark"] .model-contact.selected .profile-role,
+html[data-theme="dark"] .model-contact:hover .profile-model,
+html[data-theme="dark"] .model-contact:focus .profile-model,
+html[data-theme="dark"] .model-contact:focus-within .profile-model,
+html[data-theme="dark"] .model-contact.selected .profile-model,
+html[data-theme="dark"] .model-contact:hover .last-message-time,
+html[data-theme="dark"] .model-contact:focus .last-message-time,
+html[data-theme="dark"] .model-contact:focus-within .last-message-time,
+html[data-theme="dark"] .model-contact.selected .last-message-time,
+html[data-theme="dark"] .saved-group:hover .model-copy span,
+html[data-theme="dark"] .saved-group:focus .model-copy span,
+html[data-theme="dark"] .saved-group:hover .last-message-time,
+html[data-theme="dark"] .saved-group:focus .last-message-time {
+  color: #dcecf7;
+}
+html[data-theme="dark"] dialog button,
+html[data-theme="dark"] .dialog-actions button,
+html[data-theme="dark"] .file-row button,
+html[data-theme="dark"] .settings-actions button,
+html[data-theme="dark"] .setup-detect-row button,
+html[data-theme="dark"] .about-me-picture-actions button,
+html[data-theme="dark"] .skill-heading button,
+html[data-theme="dark"] .config-file-button,
+html[data-theme="dark"] .history-entry button,
+html[data-theme="dark"] .history-actions button,
+html[data-theme="dark"] .guide-actions button,
+html[data-theme="dark"] .group-participant-row button,
+html[data-theme="dark"] .contact-toolbar > button,
+html[data-theme="dark"] .chat-search-control button {
+  color: #edf7ff !important;
+  border-color: #6b8294 !important;
+  background: linear-gradient(#43596a, #283a47) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, .16);
+}
+html[data-theme="dark"] dialog button:hover,
+html[data-theme="dark"] .dialog-actions button:hover,
+html[data-theme="dark"] .file-row button:hover,
+html[data-theme="dark"] .settings-actions button:hover,
+html[data-theme="dark"] .setup-detect-row button:hover,
+html[data-theme="dark"] .about-me-picture-actions button:hover,
+html[data-theme="dark"] .skill-heading button:hover,
+html[data-theme="dark"] .config-file-button:hover,
+html[data-theme="dark"] .history-entry button:hover,
+html[data-theme="dark"] .history-actions button:hover,
+html[data-theme="dark"] .guide-actions button:hover,
+html[data-theme="dark"] .contact-toolbar > button:hover,
+html[data-theme="dark"] .chat-search-control button:hover {
+  color: #ffffff !important;
+  background: linear-gradient(#4d6c80, #315066) !important;
+}
+html[data-theme="dark"] dialog button:disabled,
+html[data-theme="dark"] .dialog-actions button:disabled,
+html[data-theme="dark"] .file-row button:disabled,
+html[data-theme="dark"] .settings-actions button:disabled {
+  color: #8fa1af !important;
+  background: #27333d !important;
+}
